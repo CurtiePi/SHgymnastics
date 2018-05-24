@@ -1,0 +1,26 @@
+extends ../layout.pug
+
+block content
+  div.pull_left.col-sm-2
+    include ../gutter.pug
+
+  div.container.col-sm-7
+    div.error_div
+      if errors
+        each error, i in errors
+          p #{error.msg}
+
+    p Name: #{user.name}
+
+    form(action='/user/update/' + user.id, method='post')
+      p
+      input(name='email', type='text', placeholder='Email', value= user.email)
+      p
+      label(for='role') Role
+      select#role(name='role')
+        each role, i in roles
+          option(value= role selected= role == user.role) #{role}
+      p
+      input(name='password', type='password', placeholder='Password')
+      p
+      button.btn.btn-primary(type='submit') Update User

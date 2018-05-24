@@ -1,0 +1,28 @@
+extends ../layout.pug
+
+block content
+  div.pull_left.col-sm-2
+    include ../gutter.pug
+
+  div.container.col-sm-7
+    h1
+      a(href='/') Users
+    if message
+      p= message
+    table.table
+      each user in users
+        tr
+          td
+            a(href='/user/profile/' + user.id) #{user.name}
+          td
+            a(href='#' + user.id) #{user.email}
+          td
+            a(href='#' + user.id) #{user.role}
+          td
+            a(href='/user/update/' + user.id) Edit
+          if isAdmin
+            td
+              a(href='/user/delete/' + user.id) Remove
+
+    p
+     a.btn.btn-primary(href='/user/create') Add New User

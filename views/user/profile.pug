@@ -1,0 +1,23 @@
+extends ../layout.pug
+
+block content
+  div.pull_left.col-sm-2
+    include ../gutter.pug
+
+  div.container.col-sm-7
+    div.error_div
+      if errors
+        each error, i in errors
+          p #{error.msg}
+
+    p Name: #{user.name}
+    p Email: #{user.email}
+    p Role: #{user.role}
+
+    p
+    if isDelete
+      form(action='/user/delete/' + user.id, method='post')
+        input(type= 'hidden', name= 'id', value= user.id)
+        button.btn.btn-primary(type='submit') Delete User
+    else
+      a.btn.btn-primary(href='/user/update/' + user.id) Edit

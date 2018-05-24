@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title Shanghai Gymnastics Admin
+
+    script(src="/component/jquery/dist/jquery.min.js")
+    script(src="/component/bootstrap/dist/js/bootstrap.min.js")
+    script(src='/javascript/utilities.js?2')
+    script(src='/javascript/project_js.js')
+    script(src='/javascript/pikaday.js')
+
+    link(rel="stylesheet" href="/component/bootstrap/dist/css/bootstrap.min.css")
+    link(rel='stylesheet', href='/stylesheet/main.css?2', type='text/css')
+    link(rel='stylesheet', href='/stylesheet/pikaday/pikaday.css', type='text/css')
+
+  body
+    if isLoggedIn
+      div.pull-right
+        a.btn.btn-primary(href='/logout') Logout
+
+    block content

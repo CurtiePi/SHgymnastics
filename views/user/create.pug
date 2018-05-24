@@ -1,0 +1,26 @@
+extends ../layout.pug
+
+block content
+  div.pull_left.col-sm-2
+    include ../gutter.pug
+
+  div.container.col-sm-7
+    div.error_div
+      if errors
+        each error, i in errors
+          p #{error.msg}
+
+    form(action='/user/create/', method='post')
+      p
+      input(name='name', type='text', placeholder='Enter Name', required='true')
+      p
+      input(name='email', type='text', placeholder='Email', required='true')
+      p
+      label(for='role') Role
+      select#role(name='role')
+        each role, i in roles
+          option(value= role selected= role == defaultRole) #{role}
+      p
+      input(name='password', type='password', placeholder='Password', required='true')
+      p
+      button.btn.btn-primary(type='submit') Add User

@@ -1,0 +1,161 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+body {
+    background-color:#F5F6F7; /*#rd-light-grey1*/
+}
+
+.container {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+p { 
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+b {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+textarea {
+    width: 75%;
+}
+
+div.card {
+    position: relative;
+    max-width: 350px;
+}
+div.card.delivered {
+  opacity:0.5;
+}
+
+.startDate {
+  color:#999;
+  font-size:smaller;
+}
+
+.contact {
+  padding:2px 12px;
+  border:1px #999 solid;
+  margin-bottom:16px;
+}
+
+.card a {
+    position: absolute;
+    left: 325px;
+    bottom: 2px;
+    font-size: .7em;
+}
+
+.container p {
+    margin: 6px 0px 4px 0px;
+    text-overflow: "[..]";
+    line-height: 1px;
+    padding: 7px 7px;
+}
+
+.container b {
+    text-overflow: clip;
+}
+
+div.card:hover{
+    background-color: beige;
+}
+
+.card button {
+    border:none;
+    position: absolute;
+    left: 320px;
+    bottom: 40px;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    z-index:10;
+    background: url('/images/delete_20.png') no-repeat 50% 50%;
+}
+
+select {
+    width: 100px;
+}
+
+select#potential {
+    margin-right: 25px;
+}
+
+input {
+    margin: 2px;
+}
+.form-control[type='checkbox'] {
+  margin-left:4px;
+  display:inline;
+  vertical-align: middle;
+  width:auto;
+  height:auto;
+}
+div.error_div {
+  color: red;
+  font-size: 14px;
+  font-weight: bold;
+}
+.padtop {
+  margin-top:30px;
+}
+.panel.addnew {
+  padding:12px;
+}
+
+.panel.addnew-inline {
+  padding:12px;
+  display: inline;
+}
+
+.hidden {
+  display: hidden;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 20; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */
+    height: 50%; /* Could be more or less, depending on screen size */
+    word-wrap: break-word;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
