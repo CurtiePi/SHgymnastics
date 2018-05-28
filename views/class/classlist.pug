@@ -1,12 +1,24 @@
 extends ../layout2.pug
 
 block content
-  div.container.col-sm-7
+  div.container.col-md-9
     h1
       a(href='/') Classes
     if message
       p= message
     table.table
+      tr
+        td Class Name
+        td Instructor
+        td Class Size
+        td Class Limit
+        td Sessions
+        td Cost
+        td Pending
+        td
+        td
+        if isAdmin
+          td
       each gclass in classes
         tr
           td
@@ -15,6 +27,16 @@ block content
             a(href='#' + gclass.id) #{gclass.instructor}
           td
             a(href='#' + gclass.id) #{gclass.roster.length}
+          td
+            a(href='#' + gclass.id) #{gclass.class_limit}
+          td
+            a(href='#' + gclass.id) #{gclass.session_count}
+          td
+            a(href='#' + gclass.id) #{gclass.cost}
+          td
+            a(href='#' + gclass.id) #{gclass.isPending ? 'Y' : 'N'}
+          td
+            a(href='#' + gclass.id) Add/Remove Gymnist 
           td
             a(href='/class/update/' + gclass.id) Edit
           if isAdmin

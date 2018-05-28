@@ -27,17 +27,17 @@ block content
         p
       .form-group
         label(for='sessions') Number of sessions
-        input#sessions(name='sessions', type='text' size='3')
+        input#sessions(name='session_count', type='text' size='3')
       
         label(for='limit') Class limit
-        input#limit(name='limit', type='text' size='3')
+        input#limit(name='class_limit', type='text' size='3')
       
         label(for='cost') Class cost
         input#cost(name='cost', type='text' size ='5')
         p
       .form-group
         label(for='pending') Pending
-        input#pending(name='pending', type='checkbox',  checked=true)
+        input#pending(name='ispending', type='checkbox',  checked=true)
         p
       .form-group
         label(for='colorPicker') Select Color

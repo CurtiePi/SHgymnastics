@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Contact = require('./contact');
 var Gymnist = require('./gymnist');
 
 var AccountSchema = new Schema({
@@ -21,7 +20,21 @@ var AccountSchema = new Schema({
     set: v => Math.round(v),
     required: true,
   },
-  contact: [Contact.schema],
+  contact_address: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  contact_phone: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  contact_email: {
+    type: String,
+    required: true,
+    trim: true
+  },
   gymnists: [{type: mongoose.Schema.Types.ObjectId, ref: 'Gymnist'}],
   creation_date: {
     type: Date,

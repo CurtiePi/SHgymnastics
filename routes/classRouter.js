@@ -19,9 +19,15 @@ classRouter.use(bodyParser.json());
 classRouter.route('/list')
 .get(function (req, res, next) {
   console.log('Getting a list of Classes');
+  Classes.listClasses(function (err, classes) {
+    if (err || !classes) {
+      var err = new Error('Problem getting class list');
+      err.status = 401;
+      return next(err);
+    }
 
-  return res.render('class/classlist', {classes: [] });
-
+    return res.render('class/classlist', {classes: classes });
+  });
 
 });
 
@@ -43,8 +49,20 @@ classRouter.route('/create')
      throw (err);
    }); 
 })
-.post(function(req,res,next) {
+.post(function (req,res,next) {
   console.log('Creating new Class');
+  console.log(req.body);
+  Classes.create(req.body, function (err, user) { 
+    if (err) {
+      return next(err);
+    }
+
+    return res.redirect('/class/list');
+  });
+});
+
+classRouter.route('/profile/:cid')
+.get(function(req, res, next) {
 
 });
 

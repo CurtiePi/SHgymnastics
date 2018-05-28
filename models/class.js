@@ -41,10 +41,22 @@ var ClassSchema = new Schema({
   },
   color: {
     type: String,
-    default: "#C0C0C0"
+    default: "#FABC02"
   }
 });
 
-var Classes = mongoose.model('Class', ClassSchema);
+ClassSchema.statics.listClasses = function(callback) {
+  console.log('Finding classes');
+  Class.find({}).
+    exec(function(error, classes) {
+     if (error) {
+       return callback(error);
+     }
 
-module.exports = Classes;
+     return callback(null, classes);
+  });
+};
+
+var Class = mongoose.model('Class', ClassSchema);
+
+module.exports = Class;

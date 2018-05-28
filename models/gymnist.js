@@ -3,8 +3,6 @@ var Schema = mongoose.Schema;
 
 var Class = require('./class');
 var Account = require('./account');
-var Contact = require('./contact');
-var EmergencyContact = require('./emergency_contact');
 
 var GymnistSchema = new Schema({
   fname: {
@@ -31,8 +29,26 @@ var GymnistSchema = new Schema({
     ref: 'Account',
     required: true
   },
-  contact: [Contact.schema],
-  emergency_contact: [EmergencyContact.schema],
+  emergency_contact_name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  emergency_contact_phone: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  emergency_contact_email: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  emergency_contact_relationship: {
+    type: String,
+    required: true,
+    trim: true
+  },
   classes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Class'}],
   notes: {
     type: String,
@@ -40,6 +56,18 @@ var GymnistSchema = new Schema({
   }
 });
 
-var Gymnists = mongoose.model('Gymnist', GymnistSchema);
+GymnistSchema.statics.listGymnists = function(callback) {
+  console.log('Finding gymnists');
+  Gymnist.find({}).
+    exec(function(error, gymnists) {
+     if (error) {
+       return callback(error);
+     }
 
-module.exports = Gymnists;
+     return callback(null, gymnists);
+  });
+};
+
+var Gymnist = mongoose.model('Gymnist', GymnistSchema);
+
+module.exports = Gymnist;
