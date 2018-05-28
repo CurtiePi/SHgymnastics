@@ -42,6 +42,13 @@ UserSchema.statics.listStaff = function() {
   return query.exec();
 };
 
+UserSchema.statics.getCoaches = function() {
+  console.log('Finding coaches');
+  var query = User.find({role: 'COACH' });
+
+  return query.exec();
+};
+
 UserSchema.statics.authenticate = function (email, password, callback) {
   User.findOne({email: email })
     .exec(function (err, user) {

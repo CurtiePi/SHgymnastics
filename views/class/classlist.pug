@@ -1,0 +1,25 @@
+extends ../layout2.pug
+
+block content
+  div.container.col-sm-7
+    h1
+      a(href='/') Classes
+    if message
+      p= message
+    table.table
+      each gclass in classes
+        tr
+          td
+            a(href='/class/profile/' + gclass.id) #{gclass.title}
+          td
+            a(href='#' + gclass.id) #{gclass.instructor}
+          td
+            a(href='#' + gclass.id) #{gclass.roster.length}
+          td
+            a(href='/class/update/' + gclass.id) Edit
+          if isAdmin
+            td
+              a(href='/class/delete/' + gclass.id) Remove
+
+    p
+     a.btn.btn-primary(href='/class/create') Add New Class

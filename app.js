@@ -29,8 +29,6 @@ db.once('open', function() {
     console.log("Connected to database server correctly!");
 });
 
-//Get the route information
-var generalRoute = require('./routes/generalRouter');
 
 var app = express();
 
@@ -51,7 +49,14 @@ app.use(session({secret: 'Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogo
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Get the route information
+var generalRoute = require('./routes/generalRouter');
+var userRoute = require('./routes/userRouter');
+var classRoute = require('./routes/classRouter');
+
 app.use('/', generalRoute);
+app.use('/user', userRoute);
+app.use('/class', classRoute);
 
 //Catch 404 and forward to error handler
 app.use(function(req, res, next) {

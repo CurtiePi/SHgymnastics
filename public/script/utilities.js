@@ -76,7 +76,7 @@ var sort_by = function(field, reverse, primer){
        return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
      } 
 }
-
+/*
 function goto_unauthorized() {
   location.href="/unauthorized"
 }
@@ -103,3 +103,4 @@ function protect() {
     goto_unauthorized()
   });
 }
+*/

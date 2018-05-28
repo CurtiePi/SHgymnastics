@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    title Shanghai Gymnastics Admin
+
+    script(src="/component/jquery/dist/jquery.min.js")
+    script(src="/component/bootstrap/dist/js/bootstrap.min.js")
+    script(src='/component/pikaday/pikaday.js')
+    script(src='/script/utilities.js?2')
+    script(src='/script/project_js.js')
+
+    link(rel="stylesheet" href="/component/bootstrap/dist/css/bootstrap.min.css")
+    link(rel='stylesheet', href='/stylesheet/main.css?2', type='text/css')
+    link(rel='stylesheet', href='/stylesheet/pikaday/pikaday.css', type='text/css')
+
+  body
+    .row
+      include header.pug
+    .row
+      .pull_left.col-md-2
+        include gutter.pug
+      .col-md-10
+        block content
