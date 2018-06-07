@@ -1,0 +1,43 @@
+extends ../layout2.pug
+
+block content
+  .row
+    div.container.col-md-6
+      div.error_div
+        if errors
+          each error, i in errors
+            p #{error.msg}
+    div.col-md-6
+      button.btn.btn-primary(type='button', onclick='javascript: alert("boo")') Enroll in a Class
+  .row
+    div.container.col-md-6
+      p Name: #{gymnist.fname + ' ' + gymnist.lname }
+      - var gymnistAge = function (dob) {
+      -   var d = new Date(dob);
+      -   var today = new Date();
+      -   return today.getFullYear() - d.getFullYear();
+      - }
+      p Age: #{gymnistAge(gymnist.dob)}
+      p Account:
+        a(href='/account/profile' + gymnist.account_no) #{gymnist.account_no}
+      p Enrollment Date: #{gymnist.enrollment_date}
+      p Comments: #{gymnist.notes}
+
+      p Classes:
+        ul
+          each gclass in gymnist.classes
+            li #{gclass.title}
+
+      h3 Emergency Contact
+      p Name: #{gymnist.emergency_name}
+      p Relationship: #{gymnist.emergency_relationshio}
+      p Phone: #{gymnist.emergency_phone}
+      if isDelete
+        form(action='/gymnist/delete/' + gymnist._id, method='post')
+          input(type= 'hidden', name= 'id', value= gymnist._id)
+          button.btn.btn-primary(type='submit') Remove Gymnist
+      else
+        a.btn.btn-primary(href='/gymnist/update/' + gymnist._id) Edit
+    div.container.col-md-6
+      include ../includes/class_enroll_form.pug
+

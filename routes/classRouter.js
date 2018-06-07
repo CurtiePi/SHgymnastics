@@ -6,6 +6,7 @@ var mw = require('../lib/middlewares');
 
 var Users = require('../models/user');
 var Classes = require('../models/class');
+var Gymnasiums = require('../models/gymnasium');
 
 var classRouter= express.Router();
 module.exports = classRouter;
@@ -35,14 +36,19 @@ classRouter.route('/create')
 .get(function(req, res, next) {
   console.log('Get form to create new class');
   //get users who are staff members
-  var coaches = [];
+  var content = {coaches: [], gymnasiums: []};
 
   var coachPromise = Users.getCoaches();
-
-  coachPromise.then(function(result) {
-    coaches = result;
+  var gymPromise = Gymnasiums.getGymnasiums();
+  
+  gymPromise.then(function (result) {
+    content.gymnasiums = result;
+    return coachPromise;
+  })
+  .then(function(result) {
+    content.coaches = result;
    
-    res.render('class/create', { coaches: coaches } );
+    res.render('class/create', content );
    })
   .catch(function (err) {
      console.log('An error was happened upon');

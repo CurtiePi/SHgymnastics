@@ -1,0 +1,53 @@
+extends ../layout2.pug
+
+block content
+  div.container.col-sm-7
+    div.error_div
+      if errors
+        each error, i in errors
+          p #{error.msg}
+
+    form(action='/gymnist/create/', method='post')
+      .form-group
+        label(for='fname') First name
+        input#fname(name='fname', type='text', placeholder='First Name', required='true')
+        label(for='lname') Last name
+        input#lname(name='lname', type='text', placeholder='Last Name', required='true')
+      h3 Date of Birth
+      .form-group
+        label(for='b_month') Month
+        select#b_month(name='b_month' onchange='update_month(this)')
+      .form-group
+        label(for='b_day') Day
+        select#b_day(name='b_day')
+      .form-group
+        label(for='b_year') Year 
+        select#b_year(name='b_year' onchange='update_year(this)')
+      p
+      .form-group
+        label(for='account') Associated Account
+        select#account(name='account_no', style='width: 185px')
+          each account in accounts
+            option(value= account.account_no) #{account.fname + ' ' + account.lname}
+
+      h3 Emergency Contact Info
+      .form-group
+        label(for='em_con_name') Contact Name
+        input#em_con_name(name='emergency_name', type='text', placeholder='Name', required='true')
+      p
+      .form-group
+        label(for='em_con_phone') Contact Phone
+        input#em_con_phone(name='emergency_phone', type='text', placeholder='Phone', required='true')
+      p
+      .form-group
+        label(for='em_con_phone') Contact Relationship 
+        input#em_con_relate(name='emergency_relationship', type='text', placeholder='Relationship')
+      p
+      .form-group
+        label(for='notes') Additional Notes
+        textarea#notes(name='notes', rows=3, cols=70, placeholder='Class description')
+      p
+      button.btn.btn-primary(type='submit') Add Gymnist
+
+  script.
+    initialize_dob()

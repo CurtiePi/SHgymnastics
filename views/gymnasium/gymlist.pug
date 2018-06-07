@@ -1,0 +1,41 @@
+extends ../layout2.pug
+
+block content
+  div.container.col-md-9
+    h1
+      a(href='/') Accounts
+    if message
+      p= message
+    table.table
+      tr
+        td Name
+        td Branch 
+        td Address 
+        td District
+        td Email
+        td Accounts 
+        td
+        if isAdmin
+          td
+      each gymnasium in gymnasiums
+        tr
+          td
+            a(href='/gymnasium/profile/' + gymnasium._id) #{gymnasium.name}
+          td
+            a(href='#' + gymnasium_id) #{gymnasium.branch_name}
+          td
+            a(href='#' + gymnasium._id) #{gymnasium.address}
+          td
+            a(href='#' + gymnasium._id) #{gymnasium.district}
+          td
+            a(href='#' + gymnasium._id) #{gymnasium.email}
+          td
+            a(href='#' + gymnasium._id) #{gymnasium.accounts.length}
+          td
+            a(href='/gymnasium/update/' + gymnasium._id) Edit
+          if isAdmin
+            td
+              a(href='/gymnasium/delete/' + gymnasium.id) Remove
+
+    p
+     a.btn.btn-primary(href='/gymnasium/create') Add New Gym 

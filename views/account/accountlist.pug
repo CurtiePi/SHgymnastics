@@ -1,0 +1,41 @@
+extends ../layout2.pug
+
+block content
+  div.container.col-md-9
+    h1
+      a(href='/') Accounts
+    if message
+      p= message
+    table.table
+      tr
+        td Name
+        td Account No.
+        td Email
+        td Gymnists No.
+        td Open Date
+        td Active 
+        td
+        if isAdmin
+          td
+      each account in accounts
+        tr
+          td
+            a(href='/account/profile/' + account._id) #{account.fname + ' ' + account.lname}
+          td
+            a(href='#' + account_id) #{account.account_no}
+          td
+            a(href='#' + account._id) #{account.contact_email}
+          td
+            a(href='#' + account._id) #{account.gymnists.length}
+          td
+            a(href='#' + account._id) #{account.creation_date}
+          td
+            a(href='#' + account._id) #{account.isActive ? 'Y' : 'N'}
+          td
+            a(href='/account/update/' + account._id) Edit
+          if isAdmin
+            td
+              a(href='/account/delete/' + account.id) Remove
+
+    p
+     a.btn.btn-primary(href='/account/create') Add New Account

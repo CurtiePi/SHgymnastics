@@ -20,11 +20,23 @@ block content
         textarea#description(name='description', rows=3, cols=70, placeholder='Class description')
       p
       .form-group
+        label(for='gymnasium') Gymnasium Branch
+        select#gymnasium(name='gymnasium', style='width: 185px')
+          each gymnasium in gymnasiums
+            option(value= gymnasium._id) #{gymnasium.branch_name}
+
+      p
+      .form-group
         label(for='instructor') Instructor
         select#instructor(name='instructor' style="width: 185px")
           each instructor in coaches 
             option(value= instructor.name) #{instructor.name}
-        p
+      p
+      .form-group
+        label(for='duration') Class duration (in mins)
+        select#duration(name='class_duration', style='width: 85px')
+          each duration in [30, 45, 60, 120, 180]
+            option(value= duration) #{duration}
       .form-group
         label(for='sessions') Number of sessions
         input#sessions(name='session_count', type='text' size='3')

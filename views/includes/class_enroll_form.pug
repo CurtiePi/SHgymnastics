@@ -1,0 +1,18 @@
+.col-md-12
+  form(action='/gymnist/enroll', method='post')
+    input(type= 'hidden', name= 'gymnist_id', value= gymnist._id)
+    .form-group
+      label(for='locale') Gym Branch
+      select#locale.select.form-control.input-med(name='gym_id', onchange='update_class_options()' style='width: 40%')
+        each gymnasium in gymnasiums
+          option(value= gymnasium.id) #{gymnasium.branch_name}
+    .form-group
+      label(for='gclass') Classes
+    select#gclass.select.form-control.input-med(name='class_id' style='width: 40%')
+      each lesson in lessons
+        option(value= lesson.id gymid= lesson.gymnasium.id) #{lesson.title}
+    
+    button.btn.btn-primary(type='submit') Complete Enrollment
+
+  script.
+    initialize_class_options();

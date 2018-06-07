@@ -12,6 +12,11 @@ block content
         td Account No.
         td No. Classes
         td Age
+        - var gymnistAge = function (dob) {
+        -   var d = new Date(dob);
+        -   var today = new Date();
+        -   return today.getFullYear() - d.getFullYear();
+        - }
         td Enrollment Date
         td Notes
         td
@@ -20,17 +25,13 @@ block content
       each gymnist in gymnists
         tr
           td
-            a(href='/class/profile/' + gymnist.id) #{gymist.fname + gymnist.lname}
+            a(href='/gymnist/profile/' + gymnist.id) #{gymnist.fname + ' ' +  gymnist.lname}
           td
-            a(href='#' + gymnist.account_id) #{gymnist.account_id}
-          td
-            a(href='#' + gymnist.id) #{gymnist.classes.length}
-          td
-            a(href='#' + gymnist.id) #{gymnist.dob}
-          td
-            a(href='#' + gymnist.id) #{gymnist.enrollment_date}
-          td
-            a(href='#' + gymnist.id) #{gymnist.notes}
+            a(href='/account/profile' + gymnist.account_no) #{gymnist.account_no}
+          td #{gymnist.classes.length}
+          td #{gymnistAge(gymnist.dob)}
+          td #{gymnist.enrollment_date}
+          td #{gymnist.notes}
           td
             a(href='/gymnist/update/' + gymnist.id) Edit
           if isAdmin

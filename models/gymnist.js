@@ -24,27 +24,21 @@ var GymnistSchema = new Schema({
     required: true,
     default: Date.now
   },
-  account_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Account',
+  account_no: {
+    type: String,
     required: true
   },
-  emergency_contact_name: {
+  emergency_name: {
     type: String,
     required: true,
     trim: true
   },
-  emergency_contact_phone: {
+  emergency_phone: {
     type: String,
     required: true,
     trim: true
   },
-  emergency_contact_email: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  emergency_contact_relationship: {
+  emergency_relationship: {
     type: String,
     required: true,
     trim: true
@@ -66,6 +60,27 @@ GymnistSchema.statics.listGymnists = function(callback) {
 
      return callback(null, gymnists);
   });
+};
+
+GymnistSchema.statics.getOneGymnist = function (data) {
+  return Gymnist.findById(data)
+         .populate('classes')
+         .exec();
+}
+
+GymnistSchema.statics.prepareData = function (data) {
+  var outputObj = {};
+  outputObj.fname = data.fname;
+  outputObj.lname = data.lname;
+  outputObj.account_no = data.account_no;
+  outputObj.emergency_name = data.emergency_name;
+  outputObj.emergency_phone = data.emergency_phone;
+  outputObj.emergency_relationship = data.emergency_relationship;
+  outputObj.notes = data.notes;
+  var date_of_birth = new Date(data.b_year, data.b_month,  data.b_day);
+  outputObj.dob = date_of_birth.getTime();
+
+  return outputObj;
 };
 
 var Gymnist = mongoose.model('Gymnist', GymnistSchema);

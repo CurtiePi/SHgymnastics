@@ -1,0 +1,34 @@
+extends ../layout2.pug
+
+block content
+  div.container.col-sm-7
+    div.error_div
+      if errors
+        each error, i in errors
+          p #{error.msg}
+
+    form(action='/gymnasium/create/', method='post')
+      .form-group
+        label(for='name') Name
+        input#fname(name='name', type='text', placeholder='Name', required='true')
+      p
+      .form-group
+        label(for='b_name') Branch name
+        input#b_name(name='branch_name', type='text', placeholder='Branch Name', required='true')
+      p
+      .form-group
+        label(for='address') Address
+        input#address(name='address', type='text', placeholder='Address', required='true')
+      p
+      .form-group
+        label(for='district') District
+        input#district(name='district', type='text', placeholder='District', required='true')
+      p
+      .form-group
+        label(for='phone') Phone
+        input#phone(name='phone', type='text', placeholder='Phone')
+      p
+      .form-group
+        label(for='email') Email
+        input#email(name='email', type='text', placeholder='Email')
+      button.btn.btn-primary(type='submit') Add Account
