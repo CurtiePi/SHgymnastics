@@ -60,7 +60,7 @@ gymnistRouter.route('/create')
       return next(err);
     } else {
 
-      var acctPromise = Accounts.getOneAccount(gymnist.account);
+      var acctPromise = Accounts.addGymnist(gymnist.account, gymnist.id);
       acctPromise.then(function (account) {
         var payPromise = PaymentManager.chargeAccount(account);
 

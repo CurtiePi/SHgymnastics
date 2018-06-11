@@ -137,6 +137,14 @@ AccountSchema.statics.updateAnAccount = function (acct_id, data) {
          });
 }
 
+AccountSchema.statics.addGymnist = function (acct_id, gymnist_id) {
+  var aid = new ObjectID(acct_id);
+  var gid = new ObjectID(gymnist_id);
+  
+  var query =  Account.findOneAndUpdate({_id: aid}, {"$push": {gymnists: gid} });
+  return query.exec();
+};
+
 AccountSchema.methods.updateBalance = function(amt) {
   var query = this.model('Account')
                   .updateOne({ "_id": new ObjectID(this.id) }, {$inc: {balance_due: amt } });
