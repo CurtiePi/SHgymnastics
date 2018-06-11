@@ -1,0 +1,47 @@
+extends ../layout2.pug
+
+block content
+  div.container.col-sm-7
+    div.error_div
+      if errors
+        each error, i in errors
+          p #{error.msg}
+
+    form(action='/account/update/'+ account.id, method='post')
+      .form-group
+        label(for='fname') First name
+        input#fname(name='fname', type='text', placeholder='First Name', required='true' value= account.fname)
+        label(for='lname') Last name
+        input#lname(name='lname', type='text', placeholder='Last Name', required='true' value= account.lname)
+      .form-group
+        label(for='account') Account No.
+        input#account(name='account_no', type='text', placeholder='Account', required='true', value= account.account_no onfocusout='copyAccountNumber(this)')
+      p
+      .form-group
+        label(for='gymnasium') Gymnasium Branch
+        select#gymnasium(name='gymnasiums', style='width: 185px')
+          each gymnasium in gymnasiums
+            option(value= gymnasium._id selected= gymnasium.id == account.gymnasiums.id) #{gymnasium.branch_name}
+
+
+      h3 Contact Info
+      .form-group
+        label(for='contact_address') Address
+        input#contact_address(name='contact_address', type='text', placeholder='Address', required='true', value= account.contact_address)
+      p
+      .form-group
+        label(for='contact_phone_one') Contact Phone
+        input#contact_phone_one(name='contact_phone_1', type='text', placeholder='Phone', required='true', value= account.contact_phone_1)
+      p
+      .form-group
+        label(for='contact_phone_two') Contact Phone
+        input#contact_phone_two(name='contact_phone_2', type='text', placeholder='Phone' value= account.contact_phone_2)
+      p
+      .form-group
+        label(for='contact_email') Contact Email
+        input#contact_email(name='contact_email', type='text', placeholder='Email' value= account.contact_email)
+      p
+      .form-group
+        label(for='active') Active
+        input#active(name='isActive', type='checkbox',  checked=account.isActive)
+      button.btn.btn-primary(type='submit') Update Account

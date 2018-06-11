@@ -1,8 +1,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectID = require('mongodb').ObjectID;
 
 var Class = require('./class');
 var Account = require('./account');
+var Enrollment = require('./enrollment');
 
 var GymnistSchema = new Schema({
   fname: {
@@ -24,8 +26,9 @@ var GymnistSchema = new Schema({
     required: true,
     default: Date.now
   },
-  account_no: {
-    type: String,
+  account: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Enrollment',
     required: true
   },
   emergency_name: {
@@ -43,7 +46,7 @@ var GymnistSchema = new Schema({
     required: true,
     trim: true
   },
-  classes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Class'}],
+  enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Enrollment'}],
   notes: {
     type: String,
     trim: true
@@ -65,6 +68,9 @@ GymnistSchema.statics.listGymnists = function(callback) {
 GymnistSchema.statics.getOneGymnist = function (data) {
   return Gymnist.findById(data)
          .populate('classes')
+         .populate('account')
+         .populate('enrollments')
+         .populate({ path: 'enrollments', populate: {path: 'class_id'}})
          .exec();
 }
 
@@ -72,7 +78,7 @@ GymnistSchema.statics.prepareData = function (data) {
   var outputObj = {};
   outputObj.fname = data.fname;
   outputObj.lname = data.lname;
-  outputObj.account_no = data.account_no;
+  outputObj.account = new ObjectID(data.account);
   outputObj.emergency_name = data.emergency_name;
   outputObj.emergency_phone = data.emergency_phone;
   outputObj.emergency_relationship = data.emergency_relationship;
@@ -82,6 +88,29 @@ GymnistSchema.statics.prepareData = function (data) {
 
   return outputObj;
 };
+
+GymnistSchema.statics.addEnrollment = function (gymnist_id, class_id, date) {
+  var cid = new ObjectID(class_id);
+  var gid = new ObjectID(gymnist_id);
+  
+  return Enrollment.create({"class_id": cid, "enrollment_date": date })
+    .then(function (enrollment) {
+      var query =  Gymnist.findOneAndUpdate({"_id": gid}, {"$push": {"enrollments": enrollment._id} });
+      query.exec()
+           .then(function (gymnist) {
+            });
+  });
+};
+
+//Testing the use of hooks
+var autoPopulateAccount = function(next) {
+  this.populate('account');
+  next();
+};
+
+GymnistSchema.
+  pre('findOne', autoPopulateAccount).
+  pre('find', autoPopulateAccount);
 
 var Gymnist = mongoose.model('Gymnist', GymnistSchema);
 

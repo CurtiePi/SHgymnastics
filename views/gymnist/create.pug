@@ -26,9 +26,9 @@ block content
       p
       .form-group
         label(for='account') Associated Account
-        select#account(name='account_no', style='width: 185px')
+        select#account(name='account', style='width: 185px')
           each account in accounts
-            option(value= account.account_no) #{account.fname + ' ' + account.lname}
+            option(value= account._id) #{account.fname + ' ' + account.lname}
 
       h3 Emergency Contact Info
       .form-group

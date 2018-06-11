@@ -9,6 +9,7 @@ var Gymnasiums = require('../models/gymnasium');
 var Classes = require('../models/class');
 var Accounts = require('../models/account');
 
+const PaymentManager = require('../lib/payment_manager');
 var gymnistRouter = express.Router();
 module.exports = gymnistRouter;
 
@@ -59,7 +60,21 @@ gymnistRouter.route('/create')
       return next(err);
     } else {
 
-      return res.redirect('/gymnist/list');
+      var acctPromise = Accounts.getOneAccount(gymnist.account);
+      acctPromise.then(function (account) {
+        var payPromise = PaymentManager.chargeAccount(account);
+
+        payPromise.then(function (account) {
+          return res.redirect('/gymnist/list');
+        })
+        .catch(function (err) {
+          throw new Error(err);
+        });
+      })
+      .catch(function (err) {
+        throw new Error(err);
+      });
+
     }
   });
 });
@@ -100,8 +115,78 @@ gymnistRouter.route('/profile/:gid')
 gymnistRouter.route('/enroll')
 .post(function (req, res, next) {
   console.log(req.body);
-  //put the gymnist_id in the class
-  //put the class_id in the gymnist
+  var gymnist_id = req.body.gymnist_id;
+  var class_id = req.body.class_id;
+  var gym_id = req.body.gym_id;
+  var errorArray = [];
+
+  var classPromise = Classes.getSingleClass(class_id);
+  var gymnistPromise = Gymnists.getOneGymnist(gymnist_id);
+
+  classPromise.then(function(lesson) {
+      if (lesson.roster.length >= lesson.class_limit) {
+        errorArray.push(new Error('This class is fully booked!'));
+      }
+      if (lesson.roster.indexOf(gymnist_id) > -1) {
+        errorArray.push(new Error('Gymnist already enrolled in this class'));
+      }
+      if (errorArray.length > 0) {
+        var content = {isDelete: false,
+                 lessons: [],
+                 gynnasiums: [],
+                 gymnist: {},
+                 title: '',
+                 req: req.body,
+                 errors: errorArray   
+                };
+
+        var gymnistPromise = Gymnists.getOneGymnist(gymnist_id);
+        var gymnasiumPromise = Gymnasiums.getGymnasiums();
+        var classPromise = Classes.getClasses();
+
+        classPromise.then(function (lessons) {
+          content.lessons =  lessons;
+
+          return gymnasiumPromise;
+        }).then(function (gymnasiums) {
+          content.gymnasiums = gymnasiums;
+
+          return gymnistPromise;
+        }).then(function (gymnist) {
+          content.gymnist = gymnist;
+          content.title = 'Profile for ' + gymnist.fname;
+    
+          console.log(content);
+          return res.render('gymnist/profile', content);
+        }).catch( function (err) {
+          throw(err);
+        });
+      }
+      /**
+       * use the gymnistPromise and create the class and gymnaium promises
+       * to go back to the profile with a message of the class is full
+      
+      
+      }
+    // Add gymnist id to the class
+    // Add class (as an enrollment) to the gymnist
+     var rightnow = new Date();
+     var classEnrollPromise = Classes.enrollGymnist(lesson.id, gymnist_id);
+     var gymnistEnrollPromise = Gymnists.addEnrollment(gymnist_id, lesson.id, rightnow.getTime());
+     var promises = [classEnrollPromise, gymnistEnrollPromise];
+
+     Promise.all(promises).then(function (results) {
+       console.log(results);
+       return res.redirect('/gymnist/profile/' + gymnist_id);
+     })
+     .catch(function (err){
+       console.log(err);
+     });
+     */
+  })
+  .catch(function (err){
+     console.log(err);
+  });
 });
 
 gymnistRouter.route('/update/:gid')

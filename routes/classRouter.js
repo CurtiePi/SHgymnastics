@@ -8,6 +8,7 @@ var Users = require('../models/user');
 var Classes = require('../models/class');
 var Gymnasiums = require('../models/gymnasium');
 
+const PaymentManager = require('../lib/payment_manager');
 var classRouter= express.Router();
 module.exports = classRouter;
 
@@ -25,6 +26,10 @@ classRouter.route('/list')
       var err = new Error('Problem getting class list');
       err.status = 401;
       return next(err);
+    }
+
+    for (var key in classes ) {
+      PaymentManager.calcClassCost(classes[key]);
     }
 
     return res.render('class/classlist', {classes: classes });

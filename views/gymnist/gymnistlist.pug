@@ -28,7 +28,7 @@ block content
             a(href='/gymnist/profile/' + gymnist.id) #{gymnist.fname + ' ' +  gymnist.lname}
           td
             a(href='/account/profile' + gymnist.account_no) #{gymnist.account_no}
-          td #{gymnist.classes.length}
+          td #{gymnist.enrollments.length}
           td #{gymnistAge(gymnist.dob)}
           td #{gymnist.enrollment_date}
           td #{gymnist.notes}

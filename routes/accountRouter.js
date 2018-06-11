@@ -7,6 +7,7 @@ var mw = require('../lib/middlewares');
 var Accounts = require('../models/account');
 var Gymnasiums = require('../models/gymnasium');
 
+const PaymentManager = require('../lib/payment_manager');
 var accountRouter = express.Router();
 module.exports = accountRouter;
 
@@ -70,41 +71,58 @@ accountRouter.route('/create')
 accountRouter.route('/profile/:aid')
 .get(function(req, res, next) {
   console.log('Getting account profile');
-  Accounts.findById(req.params.aid)
-       .exec(req.body, function (err, account) {
-       if (err) throw err;
-
+  var acctPromise = Accounts.getOneAccount(req.params.aid);
+  acctPromise.then( function (account) {
        console.log('Account found!');
+       var content = {
+                      title: 'Profile for ' + account.fname,
+                      account: account
+                     }
 
-       return res.render('account/profile', {title: 'Profile for ' + account.fname, account: account });
+       return res.render('account/profile', content);
+  })
+  .catch( function(err) {
+    console.log('An error has occured');
+    throw (err);
   });
 });
 
 accountRouter.route('/update/:aid')
 .get(function(req, res, next) {
   console.log('Getting account profile for update');
-  Accounts.findById(req.params.aid)
-       .exec(req.body, function (err, account) {
-       if (err) throw err;
 
+  var acctPromise = Accounts.getOneAccount(req.params.aid);
+  var gymPromise = Gymnasiums.getGymnasiums();
+  var content = {};
+
+
+  gymPromise.then(function (result) {
+    content.gymnasiums = result;
+    return acctPromise;
+  })
+  .then( function (account) {
        console.log('Account found!');
+       content.title = 'Update Account  for ' + account.fname;
+       content.account = account;
 
-       return res.render('account/update', {title: 'Update account ' + account.fname, account: account });
+       return res.render('account/update', content);
+  })
+  .catch( function(err) {
+    console.log('An error has occured');
+    throw (err);
   });
+
 }).post(function(req, res, next) {
   console.log('Updating account information');
-  Accounts.findById(req.params.aid)
-       .exec(req.body, function (err, account) {
-       if (err) throw err;
+  var acctPromise = Accounts.updateAnAccount(req.params.aid, req.body);
 
-         console.log('Account found!');
+  acctPromise.then(function (account) {
 
-         account.save(function (err, account) {
-            if (err) throw err;
-            console.log('Account updated and saved');
-
-            return res.redirect('/account/accountlist');
-        });
+    return res.redirect('/account/list');
+  })
+  .catch(function (err) {
+    console.log('An error has occured');
+    throw (err);
   });
 });
 

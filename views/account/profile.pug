@@ -1,0 +1,39 @@
+extends ../layout2.pug
+
+block content
+  div.container.col-sm-7
+    div.error_div
+      if errors
+        each error in errors
+          p #{error.message}
+
+  .row
+    div.container.col-md-6
+      p Name: #{account.fname + ' ' + account.lname }
+      p Account Number: #{account.account_no}
+      p Gymnasium: #{account.gymnasiums.branch_name}
+      p Enrollment Date: #{account.creation_date}
+      p Status #{account.isActive ? 'Active' : 'Inactive'}
+      h3 Contact Info
+      p Address: #{account.contact_address}
+      br 
+      | Phone (Primary): #{account.contact_phone_1}
+      br
+      | Phone (Secondary): #{account.contact_phone_2}
+      br 
+      | Email: #{account.contact_email}
+
+      p
+      if isDelete
+        form(action='/account/delete/' + account.id, method='post')
+          input(type= 'hidden', name= 'id', value= account.id)
+          button.btn.btn-primary(type='submit') Remove Account
+      else
+        a.btn.btn-primary(href='/account/update/' + account.id) Edit
+
+    div.container.col-md-6
+      h3 Enrolled Gymnists:
+        ul
+          each gymnist in account.gymnists
+            li #{gymnist.fname + ' ' + gymnist.lname}
+
