@@ -20,6 +20,8 @@
     "https": "^1.0.0",
     "mongoose": "^5.0.18",
     "morgan": "^1.9.0",
+    "nodemailer": "^4.6.6",
+    "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^1.17.3",
     "path": "^0.12.7",
     "pug": "^2.0.1",
