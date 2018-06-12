@@ -28,7 +28,7 @@ var GymnistSchema = new Schema({
   },
   account: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Enrollment',
+    ref: 'Account',
     required: true
   },
   emergency_name: {
@@ -101,6 +101,59 @@ GymnistSchema.statics.addEnrollment = function (gymnist_id, class_id, date) {
             });
   });
 };
+
+GymnistSchema.statics.updateGymnist = function (gymnist_id, data) {
+  var gid = new ObjectID(gymnist_id);
+
+  var findPromise =  Gymnist.findById({_id: gid}) .exec();
+
+  return findPromise.then( function (gymnist) {
+
+           if (gymnist.fname != data.fname) {
+             gymnist.fname = data.fname;
+           }
+
+           if (gymnist.lname != data.lname) {
+             gymnist.lname = data.lname;
+           }
+
+           var old_acct_id;
+           var needTransfer = false;
+           if (gymnist.account.id != data.account.toString()) {
+             old_acct_id = gymnist.account;
+             var needTransfer = true;
+             gymnist.account = data.account;
+           }
+
+           if (gymnist.dob != data.dob) {
+             gymnist.dob = data.dob;
+           }
+
+           if (gymnist.emergency_name != data.emergency_name) {
+             gymnist.emergency_name = data.emergency_name
+           }
+
+           if (gymnist.emergency_phone != data.emergency_phone) {
+             gymnist.emergency_phone = data.emergency_phone;
+           }
+
+           if (gymnist.emergency_relationship != data.emergency_relationship) {
+             gymnist.emergency_relationship = data.emergency_relationship;
+           }
+
+           if (gymnist.notes != data.notes) {
+             gymnist.notes = data.notes;
+           }
+
+           gymnist.save();
+           if (needTransfer) {
+             transgerPromise = Account.transferGymnist(old_acct_id, data.account, gymnist.id);
+           }
+         })
+         .catch(function (err) {
+           console.log(err);
+         });
+}
 
 //Testing the use of hooks
 var autoPopulateAccount = function(next) {

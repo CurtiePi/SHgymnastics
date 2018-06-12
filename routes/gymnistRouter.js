@@ -52,7 +52,6 @@ gymnistRouter.route('/create')
 })
 .post(function(req, res, next) {
   console.log('Posting to create a gymnist');
-  console.log(req.body);
   var gymnistData = Gymnists.prepareData(req.body);
 
   Gymnists.create(gymnistData, function (err, gymnist) {
@@ -114,7 +113,6 @@ gymnistRouter.route('/profile/:gid')
 
 gymnistRouter.route('/enroll')
 .post(function (req, res, next) {
-  console.log(req.body);
   var gymnist_id = req.body.gymnist_id;
   var class_id = req.body.class_id;
   var gym_id = req.body.gym_id;
@@ -156,7 +154,6 @@ gymnistRouter.route('/enroll')
           content.gymnist = gymnist;
           content.title = 'Profile for ' + gymnist.fname;
     
-          console.log(content);
           return res.render('gymnist/profile', content);
         }).catch( function (err) {
           throw(err);
@@ -165,24 +162,20 @@ gymnistRouter.route('/enroll')
       /**
        * use the gymnistPromise and create the class and gymnaium promises
        * to go back to the profile with a message of the class is full
+       */
       
       
-      }
-    // Add gymnist id to the class
-    // Add class (as an enrollment) to the gymnist
      var rightnow = new Date();
      var classEnrollPromise = Classes.enrollGymnist(lesson.id, gymnist_id);
      var gymnistEnrollPromise = Gymnists.addEnrollment(gymnist_id, lesson.id, rightnow.getTime());
      var promises = [classEnrollPromise, gymnistEnrollPromise];
 
      Promise.all(promises).then(function (results) {
-       console.log(results);
        return res.redirect('/gymnist/profile/' + gymnist_id);
      })
      .catch(function (err){
        console.log(err);
      });
-     */
   })
   .catch(function (err){
      console.log(err);
@@ -192,29 +185,33 @@ gymnistRouter.route('/enroll')
 gymnistRouter.route('/update/:gid')
 .get(function(req, res, next) {
   console.log('Getting gymnist profile for update');
-  Gymnists.findById(req.params.gid)
-       .exec(req.body, function (err, gymnist) {
-       if (err) throw err;
+  var acctPromise = Accounts.getAccounts();
+  var gymnistPromise = Gymnists.getOneGymnist(req.params.gid);
+  var content =  {};
 
-       console.log('Gymnist found!');
-
-       return res.render('gymnist/update', {title: 'Update gymnist ' + gymnist.fname, gymnist: gymnist });
-  });
-}).post(function(req, res, next) {
+  gymnistPromise.then(function (gymnist) {
+    content.gymnist = gymnist;
+    content.title = 'Update for ' + gymnist.fname;
+    return acctPromise;
+  })
+  .then(function (accounts) {
+    content.accounts = accounts
+    res.render('gymnist/update', content);
+  })
+  .catch(function (err) {
+    console.log(err);
+  });    
+})
+.post(function(req, res, next) {
   console.log('Updating gymnist information');
-  Gymnists.findById(req.params.gid)
-       .exec(req.body, function (err, gymnist) {
-       if (err) throw err;
-
-         console.log('Gymnist found!');
-
-         gymnist.save(function (err, gymnist) {
-            if (err) throw err;
-            console.log('Gymnist updated and saved');
-
-            return res.redirect('/gymnist/gymnistlist');
-        });
-  });
+  var gymnistData = Gymnists.prepareData(req.body);
+  var gymnistPromise = Gymnists.updateGymnist(req.params.gid, gymnistData);
+  gymnistPromise.then(function (result) {
+    return res.redirect('/gymnist/list');
+  })
+  .catch(function (err) {
+    console.log(err);
+  });    
 });
 
 gymnistRouter.route('/delete/:gid')

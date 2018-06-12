@@ -1,0 +1,55 @@
+extends ../layout2.pug
+
+block content
+  div.container.col-sm-7
+    div.error_div
+      if errors
+        each error in errors
+          p #{error.message}
+
+    form(action='/gymnist/update/' + gymnist.id, method='post')
+      .form-group
+        label(for='fname') First name
+        input#fname(name='fname', type='text', placeholder='First Name', required='true' value= gymnist.fname)
+        label(for='lname') Last name
+        input#lname(name='lname', type='text', placeholder='Last Name', required='true' value= gymnist.lname)
+
+      h3 Date of Birth
+      .form-group
+        label(for='b_month') Month
+        select#b_month(name='b_month' onchange='update_month(this)')
+      .form-group
+        label(for='b_day') Day
+        select#b_day(name='b_day')
+      .form-group
+        label(for='b_year') Year 
+        select#b_year(name='b_year' onchange='update_year(this)')
+      p
+      .form-group
+        label(for='account') Associated Account
+        select#account(name='account', style='width: 185px')
+          each account in accounts
+            option(value= account._id selected= account.id == gymnist.account.id) #{account.fname + ' ' + account.lname}
+
+      h3 Emergency Contact Info
+      .form-group
+        label(for='em_con_name') Contact Name
+        input#em_con_name(name='emergency_name', type='text', placeholder='Name', required='true', value= gymnist.emergency_name)
+      p
+      .form-group
+        label(for='em_con_phone') Contact Phone
+        input#em_con_phone(name='emergency_phone', type='text', placeholder='Phone', required='true', value= gymnist.emergency_phone)
+      p
+      .form-group
+        label(for='em_con_phone') Contact Relationship 
+        input#em_con_relate(name='emergency_relationship', type='text', placeholder='Relationship', value= gymnist.emergency_relationship)
+      p
+      .form-group
+        label(for='notes') Additional Notes
+        textarea#notes(name='notes', rows=3, cols=70, placeholder='Notes')
+          | #{gymnist.notes}
+      p
+      button.btn.btn-primary(type='submit') Update Gymnist
+
+  script.
+    initialize_dob("#{gymnist.dob}")

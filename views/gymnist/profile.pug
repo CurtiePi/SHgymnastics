@@ -19,7 +19,7 @@ block content
       - }
       p Age: #{gymnistAge(gymnist.dob)}
       p Account:
-        a(href='/account/profile' + gymnist.account_no) #{gymnist.account_no}
+        a(href='/account/profile/' + gymnist.account.id) #{gymnist.account.fname + ' ' + gymnist.account.lname + ' - ' + gymnist.account.account_no}
       p Enrollment Date: #{gymnist.enrollment_date}
       p Comments: #{gymnist.notes}
 

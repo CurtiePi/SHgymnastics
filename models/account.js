@@ -138,11 +138,37 @@ AccountSchema.statics.updateAnAccount = function (acct_id, data) {
 }
 
 AccountSchema.statics.addGymnist = function (acct_id, gymnist_id) {
-  var aid = new ObjectID(acct_id);
-  var gid = new ObjectID(gymnist_id);
+  var aid = (typeof acct_id == "String") ? new ObjectID(acct_id) : acct_id;
+  var gid = (typeof gymnist_id == "String") ? new ObjectID(gymnist_id): gymnist_id;
   
   var query =  Account.findOneAndUpdate({_id: aid}, {"$push": {gymnists: gid} });
   return query.exec();
+};
+
+AccountSchema.statics.removeGymnist = function (acct_id, gymnist_id) {
+  var aid = (typeof acct_id == "String") ? new ObjectID(acct_id) : acct_id;
+  var gid = (typeof gymnist_id == "String") ? new ObjectID(gymnist_id): gymnist_id;
+  
+  var query =  Account.findOneAndUpdate({_id: aid}, {"$pull": {gymnists: gid} });
+  return query.exec();
+};
+
+AccountSchema.statics.transferGymnist = function (old_acct_id, new_acct_id, gymnist_id) {
+  
+  removePromise = Account.removeGymnist(old_acct_id, gymnist_id);
+  addPromise = Account.addGymnist(new_acct_id, gymnist_id);
+
+  removePromise.then(function (account) {
+    console.log("Gymnist removed from account");
+    return addPromise;
+  })
+  .then(function (account) {
+    console.log("Gymnist added to account");
+  })
+  .catch(function (err) {
+    console.log(err);
+  });
+  
 };
 
 AccountSchema.methods.updateBalance = function(amt) {

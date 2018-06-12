@@ -77,13 +77,27 @@ var sort_by = function(field, reverse, primer){
      } 
 }
 
-function initialize_dob() {
-  populate_month();
-  populate_day();
-  populate_year();
+function initialize_dob(date_of_birth=null) {
+  var birthday;
+  var year;
+  var days;
+  var date;
+  var month;
+
+  if (date_of_birth) {
+    birthday = new Date(date_of_birth);
+    year = birthday.getFullYear();
+    month = birthday.getMonth();
+    date = birthday.getDate() - 1;    
+    days = getDays(month, year);
+  }
+
+  populate_month(month);
+  populate_day(date, days);
+  populate_year(year);
 }
 
-function populate_month() {
+function populate_month(selIdx=0) {
   var monthEl = document.getElementById('b_month');
   var m_d = ['JAN', 'FEB', 'MAR', 'APR',
              'MAY', 'JUN', 'JUL', 'AUG',
@@ -93,11 +107,14 @@ function populate_month() {
     var opt = document.createElement('option');
     opt.value = i;
     opt.innerHTML = m_d[i];
+    if (i == selIdx) {
+      opt.selected = true;
+    }
     monthEl.appendChild(opt);
   }
 }
 
-function populate_day(numDays=31,selIdx=0) {
+function populate_day(selIdx=0, numDays=31) {
   var dayEl = document.getElementById('b_day');
 
   for (var i = 0; i < numDays; i++){
@@ -111,10 +128,15 @@ function populate_day(numDays=31,selIdx=0) {
   }
 }
 
-function populate_year(numYears=45) {
+function populate_year(selYear=0, numYears=45) {
+  var selIdx = 0;
   var yearEl = document.getElementById('b_year');
   var baseYear = new Date();
   baseYear = baseYear.getFullYear();
+  if (selYear) {
+    selIdx = selYear - (baseYear - numYears);
+    selIdx = (selIdx < 0) ? 0 : selIdx
+  }
 
   for (var i = numYears; i >= 0; i--){
     var opt = document.createElement('option');
@@ -122,6 +144,7 @@ function populate_year(numYears=45) {
     opt.innerHTML = baseYear - i;
     yearEl.appendChild(opt);
   }
+  yearEl.selectedIndex = selIdx;
 }
 
 function update_month(elemObj) {
@@ -129,23 +152,30 @@ function update_month(elemObj) {
   var selectedIndex = dayEl.selectedIndex;
   var currNumDays = dayEl.options.length;
   var thirty = [3, 5, 8, 10];
+  var month = elemObj.value;
+  var year = document.getElementById('b_year').value;
+  var numDays = getDays(month, year);
+
+  if (currNumDays != numDays) {
+    removeOptions(dayEl);
+    populate_day(selectedIndex, numDays);
+  }
+}
+
+function getDays(month, year) {
+  var thirty = [3, 5, 8, 10];
   var numDays = 31;
 
-  if (thirty.indexOf(elemObj.value) > -1) {
+  if (thirty.indexOf(month) > -1) {
     numDays = 30;
-  } else if (elemObj.value == 1 ) {
-    var year = document.getElementById('b_year').value;
+  } else if (month == 1) {
     if (isLeapYear(year)) {
       numDays = 29;
     } else {
       numDays = 28;
     }
   }
-
-  if (currNumDays != numDays) {
-    removeOptions(dayEl);
-    populate_day(numDays, selectedIndex);
-  }
+  return numDays
 }
 
 function update_year(elemObj) {
@@ -165,7 +195,7 @@ function update_year(elemObj) {
   
   if (currNumDays != numDays) {  
     removeOptions(dayEl);
-    populate_day(numDays, selectedIndex);
+    populate_day(selectedIndex, numDays);
   }
 }
 
