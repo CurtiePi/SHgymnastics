@@ -2,6 +2,24 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 var Schema = mongoose.Schema;
 
+
+var PWResetSchema = new Schema ({
+  hash: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+    trim: true
+  }
+});
+
+var PWReset = mongoose.model('PWReset', PWResetSchema);
+
 var UserSchema = new Schema({
   name: {
     type: String,
@@ -49,6 +67,13 @@ UserSchema.statics.getCoaches = function() {
   return query.exec();
 };
 
+UserSchema.statics.getUserByEmail = function(email) {
+  console.log('Finding user');
+  var query = User.findOne({ email: email });
+
+  return query.exec();
+};
+
 UserSchema.statics.authenticate = function (email, password, callback) {
   User.findOne({email: email })
     .exec(function (err, user) {
@@ -86,6 +111,51 @@ UserSchema.statics.isAdminRole = function (userId, callback) {
     });
 };
 
+UserSchema.statics.getUserToReset = function (hash) {
+  var resetPromise =  PWReset.findOne({hash: hash}).exec();
+
+  return resetPromise.then(function (reset) {
+    if (!reset) {
+       console.log("Returning a rejection promise");
+       return new Promise((resolve, reject) => {
+        reject(new Error("User cannot reset password at this time."));
+      });
+    }
+
+     console.log("Returning a user promise");
+     return User.findOne({_id: reset.user_id}).exec();
+  })
+  .catch (function (err) {
+    console.log(err.message);
+  });
+};
+
+UserSchema.methods.clearReset = function () {
+  var resetPromise = PWReset.remove({user_id: this._id}).exec();
+
+  resetPromise.then(function (result) {
+    console.log("Reset cleared of user");
+  })
+  .catch (function (err) {
+    console.log("Error while trying to clear reset of user");
+    console.log(err);
+  });
+};
+
+UserSchema.statics.clearUserReset = function (hash) {
+  PWReset.remove({hash: hash}).exec();
+};
+
+UserSchema.methods.storeHash = function(hash) {
+  return PWReset.create({hash: hash,
+                         user_id: this._id});
+};
+
+UserSchema.methods.resetPassword = function(newpwd) {
+  this.password = newpwd;
+  this.save();
+};
+
 UserSchema.pre('save', function (next) {
   var user = this;
   console.log('Presave the user to hash the password');
@@ -103,6 +173,7 @@ UserSchema.pre('save', function (next) {
     next();
   }
 });
+
 
 var User = mongoose.model('User', UserSchema);
 module.exports = User;

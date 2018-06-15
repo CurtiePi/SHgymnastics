@@ -18,10 +18,6 @@ block content
         each error, i in errors
           p #{error.message}
 
-    form(action='login', method='post')
+    form(action='forgotpwd', method='post')
       input(name='email', type='text', placeholder='Email', required='true')
-      input(name='password', type='password', placeholder='Password', required='true')
-      button(type='submit') Sign in
-
-    p
-      a(href='/forgotpwd') Forgot Password
+      button(type='submit') Retrieve Password 

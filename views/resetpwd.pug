@@ -16,12 +16,11 @@ block content
     div.error_div
       if errors
         each error, i in errors
-          p #{error.message}
+          p #{error.msg}
 
-    form(action='login', method='post')
-      input(name='email', type='text', placeholder='Email', required='true')
-      input(name='password', type='password', placeholder='Password', required='true')
-      button(type='submit') Sign in
+    form(action='resetpwd', method='post')
+      input(name='handle', type='hidden', value= handle)
+      input(name='newpwd', type='password', placeholder='Type Password', required='true')
+      input(name='confirmpwd', type='password', placeholder='Re-Type Password', required='true')
+      button(type='submit') Reset Password
 
-    p
-      a(href='/forgotpwd') Forgot Password
