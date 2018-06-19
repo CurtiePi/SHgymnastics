@@ -7,6 +7,7 @@ var mw = require('../lib/middlewares');
 var Users = require('../models/user');
 var Classes = require('../models/class');
 var Gymnasiums = require('../models/gymnasium');
+var Schedules = require('../models/schedule');
 
 const PaymentManager = require('../lib/payment_manager');
 var classRouter= express.Router();
@@ -21,20 +22,14 @@ classRouter.use(bodyParser.json());
 classRouter.route('/list')
 .get(function (req, res, next) {
   console.log('Getting a list of Classes');
-  Classes.listClasses(function (err, classes) {
-    if (err || !classes) {
-      var err = new Error('Problem getting class list');
-      err.status = 401;
-      return next(err);
-    }
-
-    for (var key in classes ) {
-      PaymentManager.calcClassCost(classes[key]);
-    }
-
+  var classPromise = Classes.listClasses();
+  classPromise.then (function (classes) {
     return res.render('class/classlist', {classes: classes });
+  })
+  .catch(function (err) {
+    console.log(err);
+    return next(err);
   });
-
 });
 
 classRouter.route('/create')
@@ -69,6 +64,77 @@ classRouter.route('/create')
     }
 
     return res.redirect('/class/list');
+  });
+});
+
+classRouter.route('/schedule')
+.get(function (req, res, next) {
+  var classPromise = Classes.listClasses();
+  var SchedulePromise = Schedules.getScheduledClasses();
+  var data = {};
+
+  classPromise.then(function (classes) {
+    data.classes = classes;
+
+    return SchedulePromise;
+  })
+  .then(function (schedule) {
+
+    data.schedule = schedule;
+
+    return res.render('class/schedule', data );
+  })
+  .catch(function (err) {
+   console.log('Scheduling a Class');
+    return next(err);
+  });
+})
+.put(function (req, res, next) {
+  var scheduleData = Schedules.marshallData(req.body); 
+
+  var updatePromise = Schedules.updateSchedule(req.body.id, scheduleData);
+
+  updatePromise.then(function (schedule) {
+    res.setHeader('Content-Type', 'text/html');
+    res.writeHead(res.statusCode);
+    res.write('#');
+    res.end();
+  })
+  .catch(function (err) {
+   console.log('Scheduling a Class');
+    return next(err);
+  });
+})
+.post(function (req, res, next) {
+  console.log("Posting a schedule!");
+  var scheduleData = Schedules.marshallData(req.body); 
+
+  Schedules.create(scheduleData, function (err, schedule) {
+    if (err) {
+      console.log(err);
+      next(err);
+    }
+ 
+    var data = req.body.id + ":" +  schedule.id; 
+    res.setHeader('Content-Type', 'text/html');
+    res.writeHead(res.statusCode);
+    res.write(data);
+    res.end();
+  });
+})
+.delete(function (req, res, next) {
+  console.log("Deleting a class");
+
+  var deletePromise = Schedules.removeSchedule(req.body.id);
+
+  deletePromise.then(function (schedule) {
+    res.setHeader('Content-Type', 'text/html');
+    res.writeHead(res.statusCode);
+    res.write('/class/schedule');
+    res.end();
+  })
+  .catch (function (err) {
+    return next(err);
   });
 });
 

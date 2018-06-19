@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Gymnist = require('./gymnist');
 var Gymnasium = require('./gymnasium');
+var Schedule = require('./schedule');
 var Schema = mongoose.Schema;
 var ObjectID = require('mongodb').ObjectID;
 
@@ -72,14 +73,9 @@ ClassSchema.options.toObject = {
 
 ClassSchema.statics.listClasses = function(callback) {
   console.log('Finding classes');
-  Class.find({}).populate('gymnasium')
-    .exec(function(error, classes) {
-     if (error) {
-       return callback(error);
-     }
-
-     return callback(null, classes);
-  });
+  return  Class.find({})
+          .populate('gymnasium')
+          .exec();
 };
 
 ClassSchema.statics.getClasses = function() {

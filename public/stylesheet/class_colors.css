@@ -1,0 +1,8 @@
+.class_tumbling div,
+.dhx_cal_editor.class_tumbling,
+.dhx_cal_event_line.class_tumbling{
+  background-color: #ff9633!important;
+}
+.dhx_cal_event_clear.class_tumbling{
+  color: #ff9633!important;
+}

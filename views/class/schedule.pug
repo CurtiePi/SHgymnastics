@@ -1,0 +1,34 @@
+extends ../layout2.pug
+
+block content
+  script(src='/component/dhtmlx-scheduler/codebase/dhtmlxscheduler.js', charset="utf-8")
+  link(rel='stylesheet', href='/component/dhtmlx-scheduler/codebase/dhtmlxscheduler_material.css', type='text/css', title="no title"  charset="utf-8")
+  link(rel='stylesheet', href='/stylesheet/class_scheduler.css', type='text/css', title="no title"  charset="utf-8")
+  link(rel='stylesheet', href='/stylesheet/class_colors.css', type='text/css', title="no title"  charset="utf-8")
+  script(src='/script/class_scheduler.js', charset="utf-8")
+  script(src="/component/dhtmlx-scheduler/codebase/ext/dhtmlxscheduler_editors.js" type="text/javascript" charset="utf-8")
+  script(src="/component/dhtmlx-scheduler/codebase/ext/dhtmlxscheduler_limit.js" type="text/javascript" charset="utf-8")
+  script(src="/component/dhtmlx-scheduler/codebase/ext/dhtmlxscheduler_tooltip.js" type="text/javascript" charset="utf-8")
+  script(src="/component/dhtmlx-scheduler/common/dhtmlxCommon/dhtmlxcommon.js")
+  link(rel="stylesheet" type="text/css" href="/component/dhtmlx-scheduler/common/dhtmlxCombo/skins/dhtmlxcombo_dhx_terrace.css")
+  script(src="/component/dhtmlx-scheduler/common/dhtmlxCombo/dhtmlxcombo.js")
+
+  div.dhx_cal_container(id="scheduler_here", style="width: 90%; height: 500px; padding: 10px; border: 10px solid #fefece")
+    div.dhx_cal_navline
+      div.dhx_cal_prev_button
+      div.dhx_cal_next_button
+      div.dhx_cal_today_button
+      div.dhx_cal_date
+      div.dhx_cal_tab(name="day_tab" style="right: 204px")
+      div.dhx_cal_tab(name="week_tab" style="right: 140px")
+      div.dhx_cal_tab(name="month_tab" style="right: 76px")
+
+    div.dhx_cal_header
+    div.dhx_cal_data
+
+
+  script.
+    var classObj = JSON.parse('!{JSON.stringify(classes)}');
+    var scheduleObj = JSON.parse('!{JSON.stringify(schedule)}');
+    calInit(classObj, scheduleObj);
+

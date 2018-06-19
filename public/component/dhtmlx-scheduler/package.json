@@ -1,0 +1,55 @@
+{
+  "_from": "dhtmlx-scheduler",
+  "_id": "dhtmlx-scheduler@5.0.1",
+  "_inBundle": false,
+  "_integrity": "sha1-sia0wsiD6AkO49yKlMMj0sg0SME=",
+  "_location": "/dhtmlx-scheduler",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "dhtmlx-scheduler",
+    "name": "dhtmlx-scheduler",
+    "escapedName": "dhtmlx-scheduler",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/dhtmlx-scheduler/-/dhtmlx-scheduler-5.0.1.tgz",
+  "_shasum": "b226b4c2c883e8090ee3dc8a94c323d2c83448c1",
+  "_spec": "dhtmlx-scheduler",
+  "_where": "/Users/curtis/DevLab/projects/SHgymnastics",
+  "author": {
+    "name": "DHTMLX"
+  },
+  "bugs": {
+    "url": "https://github.com/DHTMLX/scheduler/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "JavaScript event calendar. Allows to manage events and appointments in different views",
+  "homepage": "https://github.com/DHTMLX/scheduler#readme",
+  "keywords": [
+    "calendar",
+    "scheduler",
+    "dhtmlx",
+    "agenda",
+    "month",
+    "day",
+    "week",
+    "year",
+    "browser"
+  ],
+  "license": "GPL-2.0",
+  "main": "codebase/dhtmlxscheduler.js",
+  "name": "dhtmlx-scheduler",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DHTMLX/scheduler.git"
+  },
+  "version": "5.0.1"
+}

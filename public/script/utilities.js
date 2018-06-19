@@ -1,4 +1,4 @@
-function makeAjaxRequest(url, method, data) {
+function makeAjaxRequest(url, method, data, callback=null) {
 
 
     var httpRequest = new XMLHttpRequest();
@@ -12,7 +12,8 @@ function makeAjaxRequest(url, method, data) {
     httpRequest.open(method, url);
     httpRequest.setRequestHeader('Content-Type', 'application/json');
     if (data !== "undefined"){
-        httpRequest.send(JSON.stringify(data));
+        var formattedData = JSON.stringify(data);
+        httpRequest.send(formattedData);
     } else {
         httpRequest.send();
     }
@@ -20,7 +21,11 @@ function makeAjaxRequest(url, method, data) {
     function alertContents() {
       if (httpRequest.readyState === XMLHttpRequest.DONE) {
         if (httpRequest.status === 200) {
-          location.href = httpRequest.responseText;
+          if(!callback) {
+            location.href = httpRequest.responseText;
+          } else {
+            callback(httpRequest.responseText);
+          }
         } else {
           console.log('There was a problem with the request.');
           console.log('Status: ' + httpRequest.status)

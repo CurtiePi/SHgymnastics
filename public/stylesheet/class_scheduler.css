@@ -1,0 +1,72 @@
+html, body {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.add_event_button{
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  background: #ff5722;
+  border-radius: 50px;
+  bottom: 40px;
+  right: 55px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.3);
+  z-index: 5;
+  cursor:pointer;
+}
+
+.add_event_button:after{
+  background: #000;
+  border-radius: 2px;
+  color: #FFF;
+  content: attr(data-tooltip);
+  margin: 16px 0 0 -137px;
+  opacity: 0;
+  padding: 4px 9px;
+  position: absolute;
+  visibility: visible;
+  font-family: "Roboto";
+  font-size: 14px;
+  visibility: hidden;
+  transition: all .5s ease-in-out;
+}
+
+.add_event_button:hover{
+  background: #ff774c;
+}
+
+.add_event_button:hover:after{
+  opacity: 0.55;
+  visibility: visible;
+}
+
+.add_event_button span:before{
+  content:"";
+  background: #fff;
+  height: 16px;
+  width: 2px;
+  position: absolute;
+  left: 26px;
+  top: 20px;
+}
+
+.add_event_button span:after{
+  content:"";
+  height: 2px;
+  width: 16px;
+  background: #fff;
+  position: absolute;
+  left: 19px;
+  top: 27px;
+}
+
+.dhx_cal_event div.dhx_event_resize.dhx_footer{
+  background-color: transparent !important;
+}
+
+.dhx_cal_light{
+  width: 40%;
+}
