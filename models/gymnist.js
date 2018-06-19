@@ -93,12 +93,11 @@ GymnistSchema.statics.addEnrollment = function (gymnist_id, class_id, date) {
   var cid = new ObjectID(class_id);
   var gid = new ObjectID(gymnist_id);
   
-  return Enrollment.create({"class_id": cid, "enrollment_date": date })
-    .then(function (enrollment) {
-      var query =  Gymnist.findOneAndUpdate({"_id": gid}, {"$push": {"enrollments": enrollment._id} });
-      query.exec()
-           .then(function (gymnist) {
-            });
+  var enrollPromise = Enrollment.create({"class_id": cid, "enrollment_date": date });
+
+  return enrollPromise.then(function (enrollment) {
+    var query =  Gymnist.findOneAndUpdate({"_id": gid}, {"$push": {"enrollments": enrollment._id} }).populate('account');
+    return query.exec();
   });
 };
 

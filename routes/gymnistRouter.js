@@ -61,7 +61,7 @@ gymnistRouter.route('/create')
 
       var acctPromise = Accounts.addGymnist(gymnist.account, gymnist.id);
       acctPromise.then(function (account) {
-        var payPromise = PaymentManager.chargeAccount(account);
+        var payPromise = PaymentManager.chargeGymnistEnrollment(account);
 
         payPromise.then(function (account) {
           return res.redirect('/gymnist/list');
@@ -75,6 +75,23 @@ gymnistRouter.route('/create')
       });
 
     }
+  });
+});
+
+gymnistRouter.route('/create/:aid')
+.get(function(req,res,next) {
+  console.log('Getting the create gymnist page for one specific account');
+  var acctPromise = Accounts.getOneAccount(req.params.aid);
+ 
+  acctPromise.then( function(result) {
+    var accounts = [];
+    accounts.push(result);
+
+    res.render('gymnist/create', { accounts: accounts });
+  })
+  .catch(function (err) {
+    console.log('An error has occured');
+    throw (err);
   });
 });
 
@@ -111,7 +128,7 @@ gymnistRouter.route('/profile/:gid')
   });
 });
 
-gymnistRouter.route('/enroll')
+gymnistRouter.route('/signup')
 .post(function (req, res, next) {
   var gymnist_id = req.body.gymnist_id;
   var class_id = req.body.class_id;
@@ -171,7 +188,19 @@ gymnistRouter.route('/enroll')
      var promises = [classEnrollPromise, gymnistEnrollPromise];
 
      Promise.all(promises).then(function (results) {
-       return res.redirect('/gymnist/profile/' + gymnist_id);
+       // Results object match order of parameters in the Promise.all call
+       var classObj = results[0];
+       var gymnistObj = results[1];
+
+       var payPromise = PaymentManager.chargeClassSignup(gymnistObj, classObj);
+
+
+       payPromise.then(function (account) {
+         return res.redirect('/gymnist/profile/' + gymnist_id);
+       })
+       .catch(function (err) {
+         throw new Error(err);
+       });
      })
      .catch(function (err){
        console.log(err);
