@@ -1,0 +1,71 @@
+extends ../layout2.pug
+
+block content
+  script(src='/component/tinycolorpicker/tinycolorpicker.js')
+  link(rel='stylesheet', href='/stylesheet/tinycolorpicker/tinycolorpicker.css', type='text/css')
+
+  div.container.col-sm-7
+    div.error_div
+      if errors
+        each error, i in errors
+          p #{error.msg}
+
+    form(action='/class/update/' + classobj.id, method='post')
+      .form-group
+        label(for='title') Class Title
+        input#title(name='title', type='text', placeholder='Class Title', required='true', value= classobj.title)
+      p
+      .form-group
+        label(for='description') Class Description
+        textarea#description(name='description', rows=3, cols=70, placeholder='Class description', value= classobj.description)
+      p
+      .form-group
+        label(for='gymnasium') Gymnasium Branch
+        select#gymnasium(name='gymnasium', style='width: 185px')
+          each gymnasium in gymnasiums
+            option(value= gymnasium._id, selected= gymnasium.id == classobj.gymnasium.id) #{gymnasium.branch_name}
+
+      p
+      .form-group
+        label(for='instructor') Instructor
+        select#instructor(name='instructor' style="width: 185px")
+          each instructor in coaches 
+            option(value= instructor.name, selected= classobj.instructor == instructor.name) #{instructor.name}
+      p
+      .form-group
+        label(for='duration') Class duration (in mins)
+        select#duration(name='class_duration', style='width: 85px')
+          each duration in [30, 45, 60, 120, 180]
+            option(value= duration, selected= classobj.class_duration == duration) #{duration}
+      .form-group
+        label(for='sessions') Number of sessions
+        input#sessions(name='session_count', type='text' size='3', value= classobj.session_count)
+      
+        label(for='sessions_left') Remaining  sessions
+        input#sessions_left(name='sessions_left', type='text' size='3', value= classobj.sessions_left)
+      
+        label(for='limit') Class limit
+        input#limit(name='class_limit', type='text' size='3', value= classobj.class_limit)
+      
+        label(for='cost') Class cost
+        input#cost(name='cost', type='text' size ='5', value= classobj.cost)
+        p
+      .form-group
+        label(for='pending') Pending
+        input#pending(name='ispending', type='checkbox',  checked= classobj.ispending)
+        p
+      .form-group
+        label(for='colorPicker') Select Color
+        div#colorPicker
+          a.color
+            div.colorInner
+          div.track
+          ul.dropdown
+            li
+          input.colorInput(type="hidden" name="color", value= classobj.color) 
+        p
+        button.btn.btn-primary(type='submit') Update Class
+
+ 
+  script.
+    initColorPicker("#{classobj.color}")

@@ -1,12 +1,12 @@
 var optionsLibrary = [];
 
-function initColorPicker() {
+function initColorPicker(in_color='#FABC02') {
   var options = {
     backgroundUrl: '/images/text-color.png',
   };
   var picker = document.getElementById("colorPicker");
   picker = tinycolorpicker(picker);
-  picker.setColor('#FABC02');
+  picker.setColor(in_color);
 }
 
 function copyAccountNumber(acctEl) {

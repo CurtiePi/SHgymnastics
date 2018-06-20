@@ -125,6 +125,67 @@ ClassSchema.statics.enrollGymnist = function(class_id, gymnist_id) {
   return query.exec();
 };
 
+ClassSchema.statics.updateClass = function (class_id, data) {
+  var cid = new ObjectID(class_id);
+
+  // Make sure isPending is true or false
+  data.isPending = (data.isPending == "on" || data.isPending);
+
+  var findPromise =  Class.findById({_id: cid}) .exec();
+
+  return findPromise.then( function (classobj) {
+
+           if (classobj.title != data.title) {
+             classobj.title = data.title;
+           }
+
+           if (classobj.description != data.description) {
+             classobj.description = data.description;
+           }
+
+           if (classobj.gymnasium != data.gymnasium) {
+             classobj.gymnasium = data.gymnasium;
+           }
+
+           if (classobj.instructor != data.instructor) {
+             classobj.instructor = data.instructor;
+           }
+
+           if (classobj.class_duration != data.class_duration) {
+             classobj.class_duration = data.class_duration;
+           }
+
+           if (classobj.session_count != data.session_count) {
+             classobj.session_count = data.session_count;
+           }
+
+           if (classobj.sessions_left != data.sessions_left) {
+             classobj.sessions_left = data.sessions_left;
+           }
+
+           if (classobj.class_limit != data.class_limit) {
+             classobj.class_limit = data.class_limit;
+           }
+
+           if (classobj.cost != data.cost) {
+             classobj.cost = data.cost;
+           }
+
+           if (classobj.isPending != data.isPending) {
+             classobj.isPending = data.isPending;
+           }
+
+           if (classobj.color != data.color) {
+             classobj.color = data.color;
+           }
+
+           return classobj.save();
+         })
+         .catch(function (err) {
+           console.log(err);
+         });
+}
+
 var Class = mongoose.model('Class', ClassSchema);
 
 module.exports = Class;

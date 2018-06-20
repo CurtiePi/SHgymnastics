@@ -1,0 +1,28 @@
+extends ../layout2.pug
+
+block content
+  div.container
+    div.error_div
+      if errors
+        each error in errors
+          p #{error.message}
+
+    p Name: #{classobj.title}
+    p Description: #{classobj.description}
+    p
+    p Gymnasium Branch: #{classobj.gymnasium.branch_name}
+    p
+    p Instructor: #{classobj.instructor}
+    p
+    p Duration: #{classobj.class_duration} minutes
+    p Total Sessions: #{classobj.session_count}
+    p Sessions Remaining: #{classobj.sessions_left}
+    p Limit: #{classobj.class_limit} gymnists
+    p Cost: #{classobj.cost} RMB
+    p
+    p Pending: #{(classobj.ispending) ? 'Yes' : 'No'}
+    p
+      label(for='class_color') Color:
+      input(name='class_color', type='text', disabled=true, style={ background: classobj.color})
+    p
+      a.btn.btn-primary(href='/class/update/' + classobj._id) Edit Class

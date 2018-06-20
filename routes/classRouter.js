@@ -140,16 +140,58 @@ classRouter.route('/schedule')
 
 classRouter.route('/profile/:cid')
 .get(function(req, res, next) {
+  var classPromise = Classes.getSingleClass(req.params.cid);
+
+  classPromise.then( function (classresult) {
+    return res.render('class/profile', {classobj : classresult});
+ })
+ .catch( function (err) {
+   console.log(err);
+   next(err);
+ });
 
 });
 
-classRouter.route('/update')
+classRouter.route('/update/:cid')
 .get(function(req, res, next) {
   console.log('Get form to update class');
+  var content = {coaches: [], gymnasiums: [], classobj: {}};
+
+  var classPromise = Classes.getSingleClass(req.params.cid);
+  var coachPromise = Users.getCoaches();
+  var gymPromise = Gymnasiums.getGymnasiums();
+  
+  gymPromise.then(function (result) {
+    content.gymnasiums = result;
+    return coachPromise;
+  })
+  .then(function(result) {
+    content.coaches = result;
+   
+    return classPromise;
+  })
+  .then(function(classobj){
+    content.classobj = classobj;
+
+    res.render('class/update', content );
+   })
+  .catch(function (err) {
+     console.log('An error was happened upon');
+     throw (err);
+   }); 
 })
 .post(function(req,res,next) {
-  console.log('Uppdating Class');
+  console.log('Updating Class');
 
+  var updatePromise = Classes.updateClass(req.params.cid, req.body);
+
+  updatePromise.then(function (classobj) {
+    return res.redirect('/class/profile/' + classobj.id);
+  })
+  .catch(function (err) {
+   console.log(err);
+    return next(err);
+  });
 });
 
 classRouter.route('/update/gymist')
