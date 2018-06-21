@@ -53,8 +53,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 var generalRoute = require('./routes/generalRouter');
 var userRoute = require('./routes/userRouter');
 var classRoute = require('./routes/classRouter');
-var gymnistRoute = require('./routes/gymnistRouter');
 var gymnasiumRoute = require('./routes/gymnasiumRouter');
+var gymnistRoute = require('./routes/gymnistRouter');
+var apiRoute = require('./routes/apiRouter');
 var accountRoute = require('./routes/accountRouter');
 
 app.use('/', generalRoute);
@@ -63,6 +64,7 @@ app.use('/class', classRoute);
 app.use('/gymnist', gymnistRoute);
 app.use('/gymnasium', gymnasiumRoute);
 app.use('/account', accountRoute);
+app.use('/api', apiRoute);
 
 //Catch 404 and forward to error handler
 app.use(function(req, res, next) {

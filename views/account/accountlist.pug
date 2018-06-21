@@ -12,7 +12,7 @@ block content
         td Account No.
         td Email
         td Gymnists No.
-        td Open Date
+        td Balance 
         td Active 
         td
         if isAdmin
@@ -28,7 +28,7 @@ block content
           td
             a(href='#' + account._id) #{account.gymnists.length}
           td
-            a(href='#' + account._id) #{account.creation_date}
+            a(href='#' + account._id) #{account.balance_due}
           td
             a(href='#' + account._id) #{account.isActive ? 'Y' : 'N'}
           td

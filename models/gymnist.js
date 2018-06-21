@@ -89,7 +89,11 @@ GymnistSchema.statics.prepareData = function (data) {
   return outputObj;
 };
 
-GymnistSchema.statics.addEnrollment = function (gymnist_id, class_id, date) {
+GymnistSchema.statics.enrollGymnist = function(data) {
+  return Gymnist.create(data);
+};
+
+GymnistSchema.statics.addClassEnrollment = function (gymnist_id, class_id, date) {
   var cid = new ObjectID(class_id);
   var gid = new ObjectID(gymnist_id);
   

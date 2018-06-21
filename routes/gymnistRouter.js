@@ -184,7 +184,7 @@ gymnistRouter.route('/signup')
       
      var rightnow = new Date();
      var classEnrollPromise = Classes.enrollGymnist(lesson.id, gymnist_id);
-     var gymnistEnrollPromise = Gymnists.addEnrollment(gymnist_id, lesson.id, rightnow.getTime());
+     var gymnistEnrollPromise = Gymnists.addClassEnrollment(gymnist_id, lesson.id, rightnow.getTime());
      var promises = [classEnrollPromise, gymnistEnrollPromise];
 
      Promise.all(promises).then(function (results) {

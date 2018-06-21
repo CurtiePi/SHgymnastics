@@ -69,7 +69,16 @@ AccountSchema.options.toObject = {
     delete ret._id;
     delete ret.__v;
   }
-}
+};
+
+AccountSchema.statics.createAccount = function(data) {
+  //make sure the gymnasium is an ObjectID
+  if (data.gymnasiums && typeof data.gymnasiums != "object") {
+    data.gymnasiums = new ObjectID(data.gymnasiums);
+  }
+
+  return Account.create(data);
+};
 
 AccountSchema.statics.getAccounts = function() {
   console.log('Finding accounts');
@@ -84,7 +93,7 @@ AccountSchema.statics.getOneAccount = function (data) {
          .populate('gymnists')
          .populate('gymnasiums')
          .exec();
-}
+};
 
 AccountSchema.statics.updateAnAccount = function (acct_id, data) {
   var aid = new ObjectID(acct_id);
@@ -135,7 +144,7 @@ AccountSchema.statics.updateAnAccount = function (acct_id, data) {
          .catch(function (err) {
            console.log(err);
          });
-}
+};
 
 AccountSchema.statics.addGymnist = function (acct_id, gymnist_id) {
   var aid = (typeof acct_id == "String") ? new ObjectID(acct_id) : acct_id;
