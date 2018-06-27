@@ -32,48 +32,6 @@ classRouter.route('/list')
   });
 });
 
-/**
- * This create functionality is deprecateed in favor of functionality
- * that allows the user to create and schedule a class simultaneously
- * Will leave here temporarily.
- *
-
-classRouter.route('/create')
-.get(function(req, res, next) {
-  console.log('Get form to create new class');
-  //get users who are staff members
-  var content = {coaches: [], gymnasiums: []};
-
-  var coachPromise = Users.getCoaches();
-  var gymPromise = Gymnasiums.getGymnasiums();
-  
-  gymPromise.then(function (result) {
-    content.gymnasiums = result;
-    return coachPromise;
-  })
-  .then(function(result) {
-    content.coaches = result;
-   
-    res.render('class/create', content );
-   })
-  .catch(function (err) {
-     console.log('An error was happened upon');
-     throw (err);
-   }); 
-})
-.post(function (req,res,next) {
-  console.log('Creating new Class');
-  console.log(req.body);
-  Classes.create(req.body, function (err, user) { 
-    if (err) {
-      return next(err);
-    }
-
-    return res.redirect('/class/list');
-  });
-});
-*/
-
 classRouter.route('/create')
 .get(function (req, res, next) {
   var classPromise = Classes.listClasses();
