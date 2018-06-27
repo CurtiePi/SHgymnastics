@@ -1,0 +1,58 @@
+.div#create_form.create_form(style="{top: 50px, left: 20px; width: 100%}")
+  .row
+    .col-sm-8
+      .form-group
+        label(for='title') Class Title
+        input#title(name='title', type='text', placeholder='Class Title', required='true')
+    .col-sm-4
+      .form-group
+        label(for='colorPicker') Select Color
+        div#colorPicker
+          a.color
+            div.colorInner
+          div.track
+          ul.dropdown
+            li
+          input.colorInput(type="hidden" name="color") 
+  .row
+    .col-sm-6
+      .form-group
+        label(for='gymnasium') Gymnasium Branch
+        select#gymnasium(name='gymnasium', style='width: 185px')
+          each gymnasium in gymnasiums
+            option(value= gymnasium._id) #{gymnasium.branch_name}
+    .col-sm-6
+      .form-group
+        label(for='instructor') Instructor
+        select#instructor(name='instructor' style="width: 185px")
+          each instructor in coaches 
+            option(value= instructor.name) #{instructor.name}
+  p
+  .row
+    .col-sm-6
+      .form-group
+        label(for='description') Class Description
+        textarea#description(name='description', rows=3, cols=70, placeholder='Class description')
+  .row
+    .col-sm-12
+      .form-group
+        label(for='duration') Class duration (in mins)
+        select#duration(name='class_duration', style='width: 85px')
+          each duration in [30, 45, 60, 120, 180]
+            option(value= duration) #{duration}
+
+        label(for='sessions') Number of sessions
+        input#sessions(name='session_count', type='text' size='3')
+ 
+        label(for='limit') Class limit
+        input#limit(name='class_limit', type='text' size='3')
+      
+        label(for='cost') Class cost
+        input#cost(name='cost', type='text' size ='5')
+
+      .form-group
+        label(for='pending') Pending
+        input#pending(name='ispending', type='checkbox',  checked=true)
+ 
+script.
+  initColorPicker()

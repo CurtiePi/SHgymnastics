@@ -6,6 +6,7 @@ block content
   link(rel='stylesheet', href='/stylesheet/class_scheduler.css', type='text/css', title="no title"  charset="utf-8")
   link(rel='stylesheet', href='/stylesheet/class_colors.css', type='text/css', title="no title"  charset="utf-8")
   script(src='/script/class_scheduler.js', charset="utf-8")
+  script(src="/component/dhtmlx-scheduler/codebase/ext/dhtmlxscheduler_recurring.js" type="text/javascript" charset="utf-8")
   script(src="/component/dhtmlx-scheduler/codebase/ext/dhtmlxscheduler_editors.js" type="text/javascript" charset="utf-8")
   script(src="/component/dhtmlx-scheduler/codebase/ext/dhtmlxscheduler_limit.js" type="text/javascript" charset="utf-8")
   script(src="/component/dhtmlx-scheduler/codebase/ext/dhtmlxscheduler_tooltip.js" type="text/javascript" charset="utf-8")
@@ -13,7 +14,12 @@ block content
   link(rel="stylesheet" type="text/css" href="/component/dhtmlx-scheduler/common/dhtmlxCombo/skins/dhtmlxcombo_dhx_terrace.css")
   script(src="/component/dhtmlx-scheduler/common/dhtmlxCombo/dhtmlxcombo.js")
 
+  h3 Schedule a Class
+
   div.dhx_cal_container(id="scheduler_here", style="width: 90%; height: 500px; padding: 10px; border: 10px solid #fefece")
+    
+    include ../includes/custom_recur.pug  
+
     div.dhx_cal_navline
       div.dhx_cal_prev_button
       div.dhx_cal_next_button

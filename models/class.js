@@ -9,7 +9,6 @@ var ClassSchema = new Schema({
   title: {
     type: String,
     required: true,
-    unique: true,
     trim: true
   },
   description: {
@@ -75,7 +74,10 @@ ClassSchema.statics.listClasses = function(callback) {
   console.log('Finding classes');
   return  Class.find({})
           .populate('gymnasium')
-          .exec();
+          .exec().catch(function (err){
+                     console.log("Error in Class model listClasses function");
+                     console.log(err);
+                   });
 };
 
 ClassSchema.statics.getClasses = function() {
@@ -87,6 +89,23 @@ ClassSchema.statics.getClasses = function() {
 ClassSchema.statics.getSingleClass = function(class_id) {
   return Class.findOne({ _id: new ObjectID(class_id) })
     .exec();
+};
+
+ClassSchema.statics.marshallData = function (data) {
+  var outputObj = {};
+
+  outputObj.title = data.text;
+  outputObj.description = data.class_description;
+  outputObj.session_count = data.class_sessions;
+  outputObj.sessions_left = data.class_sessions;
+  outputObj.class_limit = data.class_limit;
+  outputObj.class_duration = data.class_duration;
+  outputObj.isPending = data.is_pending;
+  outputObj.gymnasium = new ObjectID(data.class_gym);
+  outputObj.instructor = data.class_instructor;
+  outputObj.cost = data.class_cost;
+
+  return outputObj;
 };
 
 //TODO:  Figure out a way to implement this correctly
@@ -123,6 +142,25 @@ ClassSchema.statics.enrollGymnist = function(class_id, gymnist_id) {
   var query = Class.findOneAndUpdate({_id: cid}, {"$push": { "roster": gid}});
 
   return query.exec();
+};
+
+ClassSchema.statics.createAndSchedule = function (data) {
+  var classData = Class.marshallData(data);
+ 
+  var createPromise = Class.create(classData);
+
+  return createPromise.then(function (classobj) {
+    data.class_id = classobj._id.toString();
+
+    var scheduleData = Schedule.marshallData(data);
+
+    return Schedule.create(scheduleData);
+  })
+  .catch(function (err) {
+    console.log(err);
+    throw err;
+  });
+
 };
 
 ClassSchema.statics.updateClass = function (class_id, data) {

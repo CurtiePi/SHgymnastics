@@ -32,6 +32,12 @@ classRouter.route('/list')
   });
 });
 
+/**
+ * This create functionality is deprecateed in favor of functionality
+ * that allows the user to create and schedule a class simultaneously
+ * Will leave here temporarily.
+ *
+
 classRouter.route('/create')
 .get(function(req, res, next) {
   console.log('Get form to create new class');
@@ -64,6 +70,97 @@ classRouter.route('/create')
     }
 
     return res.redirect('/class/list');
+  });
+});
+*/
+
+classRouter.route('/create')
+.get(function (req, res, next) {
+  var classPromise = Classes.listClasses();
+  var schedulePromise = Schedules.getScheduledClasses();
+  var data = {};
+  //get users who are staff members
+  var content = {coaches: [], gymnasiums: []};
+
+  var coachPromise = Users.getCoaches();
+  var gymPromise = Gymnasiums.getGymnasiums();
+  
+  gymPromise.then(function (result) {
+    content.gymnasiums = result;
+
+    return coachPromise;
+  })
+  .then(function(result) {
+    content.coaches = result;
+
+    return schedulePromise;
+  })
+  .then(function (result) {
+    content.schedule = result;
+
+    return classPromise;
+  })
+  .then(function(result) {
+    content.classes = result;
+
+    console.log("NEW SCHEDULE");
+
+    res.render('class/create', content );
+   })
+  .catch(function (err) {
+     console.log('An error was happened upon');
+     console.log(err);
+     throw (err);
+   }); 
+})
+.put(function (req, res, next) {
+  var scheduleData = Schedules.marshallData(req.body); 
+
+  var updatePromise = Schedules.updateSchedule(req.body.id, scheduleData);
+
+  updatePromise.then(function (schedule) {
+    res.setHeader('Content-Type', 'text/html');
+    res.writeHead(res.statusCode);
+    res.write('#');
+    res.end();
+  })
+  .catch(function (err) {
+   console.log('Scheduling a Class');
+    return next(err);
+  });
+})
+.post(function (req, res, next) {
+  console.log("Posting a schedule!");
+  console.log(req.body);
+  var createPromise = Classes.createAndSchedule(req.body);
+
+  createPromise.then(function (schedule) {
+    console.log(schedule);
+
+    var data = req.body.id + ":" +  schedule.id; 
+    res.setHeader('Content-Type', 'text/html');
+    res.writeHead(res.statusCode);
+    res.write(data);
+    res.end();
+  })
+  .catch (function (err) {
+    console.log('Creating and Scheduling a Class');
+    return next(err);
+  });
+})
+.delete(function (req, res, next) {
+  console.log("Deleting a class");
+
+  var deletePromise = Schedules.removeSchedule(req.body.id);
+
+  deletePromise.then(function (schedule) {
+    res.setHeader('Content-Type', 'text/html');
+    res.writeHead(res.statusCode);
+    res.write('/class/schedule');
+    res.end();
+  })
+  .catch (function (err) {
+    return next(err);
   });
 });
 

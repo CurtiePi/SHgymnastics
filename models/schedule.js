@@ -14,15 +14,27 @@ var ScheduleSchema = new Schema({
     required: true,
     trim: true
   },
-  begin: {
+  start_date: {
     type: Date,
     required: true
   },
-  finish: {
+  end_date: {
     type: Date,
     required: true
   },
-  notes: {
+  event_pid: {
+    type: String,
+    trim: true,
+    default: 0
+  },
+  event_length: {
+    type: Number
+  },
+  rec_pattern: {
+    type: String,
+    trim: true
+  },
+  rec_type: {
     type: String,
     trim: true
   }
@@ -31,9 +43,9 @@ var ScheduleSchema = new Schema({
 ScheduleSchema.options.toObject = {
   virturals: true,
   transform: function(doc, ret) {
-    var sd = ret.begin.getFullYear() + "-" + (1 + ret.begin.getMonth()) + "-" + ret.begin.getDate() + " " + ret.begin.getHours() + ":" + ret.begin.getMinutes();
+    var sd = ret.start_date.getFullYear() + "-" + (1 + ret.start_date.getMonth()) + "-" + ret.start_date.getDate() + " " + ret.start_date.getHours() + ":" + ret.start_date.getMinutes();
 
-    var ed = ret.finish.getFullYear() + "-" + (1 + ret.finish.getMonth()) + "-" + ret.finish.getDate() + " " + ret.finish.getHours() + ":" + ret.finish.getMinutes();
+    var ed = ret.end_date.getFullYear() + "-" + (1 + ret.end_date.getMonth()) + "-" + ret.end_date.getDate() + " " + ret.end_date.getHours() + ":" + ret.end_date.getMinutes();
 
     ret.id = ret._id.toString();
     ret.text = ret.title;
@@ -53,16 +65,28 @@ ScheduleSchema.statics.updateSchedule = function(sched_id, data) {
 
   return findPromise.then(function (schedule) {
 
-    if (schedule.begin != data.begin) {
-      schedule.begin = data.begin;
+    if (schedule.start_date != data.start_date) {
+      schedule.start_date = data.start_date;
     }
 
-    if (schedule.finish != data.finish) {
-      schedule.finish = data.finish;
+    if (schedule.end_date != data.end_date) {
+      schedule.end_date = data.end_date;
     }
 
-    if (schedule.notes != data.notes) {
-      schedule.notes = data.notes;
+    if (schedule.event_pid != data.event_pid) {
+      schedule.event_pid = data.event_pid;
+    }
+
+    if (schedule.event_length != data.event_length) {
+      schedule.event_length = data.event_length;
+    }
+
+    if (schedule.rec_pattern != data.rec_pattern) {
+      schedule.rec_pattern = data.rec_pattern
+    }
+
+    if (schedule.rec_type != data.rec_type) {
+      schedule.rec_type = data.rec_type;
     }
 
     if (schedule.class_id != data.class_id) {
@@ -85,15 +109,23 @@ ScheduleSchema.statics.marshallData = function (data) {
 
   outputObj.title = data.text;
   outputObj.class_id = data.class_id;
-  outputObj.begin = data.start_date;
-  outputObj.finish = data.end_date;
-  outputObj.notes = data.notes;
+  outputObj.start_date = data.start_date;
+  outputObj.end_date = data.end_date;
+  outputObj.event_pid= data.event_pid;
+  outputObj.event_length = data.event_length;
+  outputObj.rec_pattern = data.rec_pattern;
+  outputObj.rec_type = data.rec_type;
 
   return outputObj;
 };
 
 ScheduleSchema.statics.getScheduledClasses = function() {
-  return Schedule.find({}).exec();
+  return Schedule.find({})
+                 .exec()
+                 .catch(function (err){
+                   console.log("Error: Schedule model getScheduledClasses function");
+                   console.log(err);
+                 });
 };
 
 ScheduleSchema.statics.removeSchedule = function(sched_id) {

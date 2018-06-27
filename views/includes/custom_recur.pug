@@ -1,0 +1,36 @@
+div#sh_recurring.dhx_form_repeat(style="display: none;")
+  form
+    div.dhx_repeat_left
+      select(name="repeat")
+        option(value="day") Daily
+        option(value="week") Weekly
+
+    div.dhx_repeat_divider
+    div.dhx_repeat_center
+      div#dhx_repeat_day(style="display:none; height: 2px")
+        input(type="hidden" name="day_type" value="d")
+        input(type="hidden" name="day_count" value="1")
+      div#dhx_repeat_week(style="display:none; height: 20px")
+        |Repeat every 
+        input.dhx_repeat_text(type="text" name="week_count" value="1")
+        |week next days:
+        br
+        label(for='monday') Mon 
+        input#monday(class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="1")
+        label(for='tuesday') Tue 
+        input#tuesday(class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="2")
+        label(for='wednesday') Wed 
+        input#wednesday(class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="3")
+        label(for='thursday') Thu 
+        input#thursday(class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="4")
+        label(for='friday') Fri 
+        input#friday(class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="5")
+        label(for='saturday') Sat 
+        input#saturday(class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="6")
+        label(for='sunday') Sun 
+        input#sunday(class="dhx_repeat_checkbox" type="checkbox" name="week_day" value="0")
+        div.dhx_repeat_right
+          input(type="hidden" name="end" value="occurences_count") 
+          |After
+          input.dhx_repeat_text(type="text" name="occurences_count" value="1")
+          |occurances

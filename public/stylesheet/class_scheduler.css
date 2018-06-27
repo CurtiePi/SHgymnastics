@@ -67,6 +67,68 @@ html, body {
   background-color: transparent !important;
 }
 
+.dhx_cal_light_rec.dhx_cal_light_wide {
+  width: 45%;
+}
+
 .dhx_cal_light{
-  width: 40%;
+   width: 45%;
+}
+
+.dhx_cal_light_wide{
+    width: 45%;
+}
+
+.dhx_cal_light_rec{
+    width: 45%;
+}
+
+.dhx_cal_larea{
+    width: 40%x;
+}
+
+#sh_recurring input.dhx_repeat_checkbox {
+  margin: 4px 4px 0 5px;
+}
+
+#sh_recurring .dhx_repeat_center {
+  height: 55px;
+}
+
+#sh_recurring .dhx_repeat_day {
+  height: 3px!important;
+}
+
+#sh_recurring .dhx_repeat_week {
+  height: 25px!important;
+}
+
+#sh_recurring input.dhx_repeat_text {
+  height: 25px !important;
+}
+
+#sh_recurring .dhx_repeat_right {
+  height: 30px;
+}
+
+#create_form {
+  position: relative;
+  top: 10px;
+  left: 20px;
+  z-index: 1000;
+  display: none;
+  background-color: white;
+  border: 2px outset grey;
+  padding: 20px;
+  font-family: Tahoma;
+  font-size: 10pt;
+}
+
+.create_form {
+  top: 10px;
+  left: 10px;
+}
+
+#create_form label {
+  margin-right: 5px;
 }

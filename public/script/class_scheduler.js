@@ -1,5 +1,7 @@
 function calInit(pClasses, pSchedule) {
   if (scheduler) {
+    scheduler.config.repeat_date = "%Y-%m-%d %H:%i";
+    scheduler.config.include_end_by = true;
     console.log('WE HAVE A SCHEDULER OBEJECT!!!');
     scheduler.config.xml_date = "%Y-%m-%d %H:%i";
     scheduler.config.first_hour = 8;
@@ -41,6 +43,7 @@ function calInit(pClasses, pSchedule) {
         var sections = scheduler.config.lightbox.sections;
         // if time is the last section
         var time_section = sections[sections.length - 1];
+        console.log(time_section.id);
         var node = document.getElementById(time_section.id).nextSibling;                    var block = scheduler.form_blocks[time_section.type];
         // note that event - is event object variable
         block.set_value.call(this, node, ev[time_section.map_to], ev, time_section);
@@ -57,11 +60,12 @@ function calInit(pClasses, pSchedule) {
         image_path: "../common/dhtmlxCombo/imgs/",
         height:30,
         filtering: true },
-      { name:"Notes",
-        height:120,
-        map_to:"notes",
-        type:"textarea",
-        focus:true},
+      { name:"recurring",
+        height:115, 
+        type:"recurring",
+        map_to:"rec_type", 
+        button:"recurring",
+        form: "sh_recurring"},
       { name: "time", 
         height: 72,
         type: "time",

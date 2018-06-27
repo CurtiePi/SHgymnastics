@@ -55,7 +55,11 @@ GymnasiumSchema.statics.getGymnasiums = function() {
   var query = Gymnasium.find({})
                        .populate('accounts');
 
-  return query.exec();
+  return query.exec()
+               .catch(function (err){
+                  console.log("Error: Gymnasium model getGymnasiums function");
+                  console.log(err);
+               });
 };
 
 GymnasiumSchema.statics.insertAccount = function(gym_id, acct_id) {

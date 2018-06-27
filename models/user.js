@@ -41,6 +41,14 @@ var UserSchema = new Schema({
   }
 });
 
+UserSchema.options.toObject = {
+  virturals: true,
+  transform: function(doc, ret) {
+    ret.id = ret._id.toString();
+    delete ret.__v;
+  }
+};
+
 UserSchema.statics.listUsers = function(callback) {
   console.log('Finding users');
   User.find({}).
@@ -64,7 +72,11 @@ UserSchema.statics.getCoaches = function() {
   console.log('Finding coaches');
   var query = User.find({role: 'COACH' });
 
-  return query.exec();
+  return query.exec()
+              .catch(function (err) {
+                console.log("Error: User model getCoaches function");
+                console.log(err);
+              });
 };
 
 UserSchema.statics.getUserByEmail = function(email) {
