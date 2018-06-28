@@ -119,6 +119,9 @@ gymnistRouter.route('/profile/:gid')
 
     return gymnistPromise;
   }).then(function (gymnist) {
+    console.log("SHOULD HAVE FOUND THE GYMNIST");
+    console.log(gymnist);
+
     content.gymnist = gymnist;
     content.title = 'Profile for ' + gymnist.fname;
     

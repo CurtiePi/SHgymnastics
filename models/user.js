@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 var Schema = mongoose.Schema;
+var ObjectID = require('mongodb').ObjectID;
 
 
 var PWResetSchema = new Schema ({
@@ -152,6 +153,12 @@ UserSchema.methods.clearReset = function () {
     console.log("Error while trying to clear reset of user");
     console.log(err);
   });
+};
+
+UserSchema.statics.getOneUser = function(user_id) {
+     var uid = new ObjectID(user_id);
+
+     return User.findOne({_id: uid}).exec();
 };
 
 UserSchema.statics.clearUserReset = function (hash) {

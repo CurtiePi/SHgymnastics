@@ -65,13 +65,16 @@ GymnistSchema.statics.listGymnists = function(callback) {
   });
 };
 
-GymnistSchema.statics.getOneGymnist = function (data) {
-  return Gymnist.findById(data)
+GymnistSchema.statics.getOneGymnist = function (gymnist_id) {
+  var gid = new ObjectID(gymnist_id);
+
+  var query =  Gymnist.findOne({ "_id": gid})
          .populate('classes')
          .populate('account')
          .populate('enrollments')
-         .populate({ path: 'enrollments', populate: {path: 'class_id'}})
-         .exec();
+         .populate({ path: 'enrollments', populate: {path: 'class_id'}});
+
+  return query.exec();
 }
 
 GymnistSchema.statics.prepareData = function (data) {
@@ -108,7 +111,7 @@ GymnistSchema.statics.addClassEnrollment = function (gymnist_id, class_id, date)
 GymnistSchema.statics.updateGymnist = function (gymnist_id, data) {
   var gid = new ObjectID(gymnist_id);
 
-  var findPromise =  Gymnist.findById({_id: gid}) .exec();
+  var findPromise =  Gymnist.findById({_id: gid}).exec();
 
   return findPromise.then( function (gymnist) {
 

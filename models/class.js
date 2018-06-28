@@ -144,6 +144,15 @@ ClassSchema.statics.enrollGymnist = function(class_id, gymnist_id) {
   return query.exec();
 };
 
+ClassSchema.statics.removeGymnist = function(class_id, gymnist_id) {
+  console.log('removing gymnist to class');
+  var cid = new ObjectID(class_id);
+  var gid = new ObjectID(gymnist_id);
+  var query = Class.findOneAndUpdate({_id: cid}, {"$pull": { "roster": gid}});
+
+  return query.exec();
+};
+
 ClassSchema.statics.createAndSchedule = function (data) {
   var classData = Class.marshallData(data);
  

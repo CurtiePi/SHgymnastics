@@ -163,6 +163,52 @@ apiRouter.route('/classes')
 });
 
 /**
+ * Transfer Classes
+ *
+ * Return a message confirming the transfer
+ *
+ */
+apiRouter.route('/classes/transfer/gymnist')
+.post(function(req, res, next) {
+  
+  var gymnistPromise = Gymnists.getOneGymnist(req.body.gid);
+  var removePromise = Classes.removeGymnist(req.body.cid, req.body.gid);
+  var enrollPromise = Classes.enrollGymnist(req.body.ncid, req.body.gid);
+
+  var promises = [gymnistPromise, removePromise, enrollPromise];
+
+  Promise.all(promises).then(function (results) {
+    var gymnistObj = results[0];
+    var oldClassObj = results[1];
+    var newClassObj = results[2];
+
+    var payPromise = PaymentManager.chargeTransferClass(gymnistObj, oldClassObj, newClassObj);
+
+    payPromise.then(function (account) {
+
+      var returnData = {};
+      var name = gymnistObj.fname + " " + gymnistObj.lname;
+
+      returnData.name = name;
+      returnData.account_no = account.account_no;
+      returnData.account_id = account._id.toString();
+      returnData.gymnist_id = gymnistObj._id.toString();
+      returnData.message = "Gymnist " + name + "  has successfully transferred from " + oldClassObj.title + " to " + newClassObj.title;
+
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(returnData));
+    })
+    .catch(function(err){
+      console.log(err);
+    });
+  })
+  .catch(function(err){
+    console.log(err);
+  });
+
+});
+
+/**
  * Payoff balance
  *
  * Return a message acknowledging the payment
