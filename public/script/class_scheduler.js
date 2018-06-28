@@ -18,7 +18,8 @@ function calInit(pClasses, pSchedule) {
 
     var sgClass = createClassOptions(pClasses);
 
-    scheduler.config.event_duration = parseInt(sgClass[0].duration);
+    var evDuration = (sgClass[0].duration) ? sgClass[0].duration : 60;
+    scheduler.config.event_duration = parseInt(evDuration, 10);
     scheduler.config.auto_end_date = true;
 
     scheduler.locale.labels.section_sgClass = "Select a class:";
