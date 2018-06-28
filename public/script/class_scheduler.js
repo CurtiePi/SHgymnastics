@@ -18,7 +18,7 @@ function calInit(pClasses, pSchedule) {
 
     var sgClass = createClassOptions(pClasses);
 
-    var evDuration = (sgClass) ? sgClass[0].duration : 60;
+    var evDuration = (sgClass.length > 0) ? sgClass[0].duration : 60;
     scheduler.config.event_duration = parseInt(evDuration, 10);
     scheduler.config.auto_end_date = true;
 
