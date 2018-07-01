@@ -12,24 +12,24 @@ block content
         td Account No.
         td Email
         td Gymnists No.
-        td Balance 
+        td(onclick='unfilterTable();') Balance 
         td Active 
         td
         if isAdmin
           td
       each account in accounts
         tr
-          td
+          td(class="name")
             a(href='/account/profile/' + account._id) #{account.fname + ' ' + account.lname}
-          td
+          td(class="account_no")
             a(href='#' + account_id) #{account.account_no}
-          td
+          td(class="email")
             a(href='#' + account._id) #{account.contact_email}
           td
             a(href='#' + account._id) #{account.gymnists.length}
           td
             a(href='#' + account._id) #{account.balance_due}
-          td
+          td(class="is_active" onclick="filterTable(this);")
             a(href='#' + account._id) #{account.isActive ? 'Y' : 'N'}
           td
             a(href='/account/update/' + account._id) Edit
