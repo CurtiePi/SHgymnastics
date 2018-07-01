@@ -134,7 +134,7 @@ AccountSchema.statics.updateAnAccount = function (acct_id, data) {
              account.contact_email = data.contact_email;
            }
 
-           data.isActive = data.isActive == "on" || data.isActive;
+           data.isActive = (data.is_active && data.is_active == "on") ? true : false;
            if (account.isActive != data.isActive) {
              account.isActive = data.isActive;
            }
