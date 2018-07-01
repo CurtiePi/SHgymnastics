@@ -42,6 +42,7 @@ block content
         input#contact_email(name='contact_email', type='text', placeholder='Email' value= account.contact_email)
       p
       .form-group
-        label(for='active') Active
-        input#active(name='isActive', type='checkbox',  checked=account.isActive)
+        label(for='is_active') Active
+        input#is_active(name="is_active", type="checkbox", checked=account.isActive)
+      br
       button.btn.btn-primary(type='submit') Update Account
