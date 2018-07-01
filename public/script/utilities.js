@@ -240,6 +240,29 @@ function isLeapYear(year) {
 function randomString(length) {
     return Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
 }
+
+function filterTable(srcElement) {
+  var srcIdx = srcElement.cellIndex;
+  var srcValue = srcElement.lastChild.innerHTML;
+
+  var rowElements = srcElement.parentNode.parentNode.children;
+  for (var idx = rowElements.length -1; idx > 0; idx--) {
+    var rowElement = rowElements[idx];
+    if ( rowElement.children[srcIdx].lastChild.innerHTML != srcValue) {
+      rowElement.style.display = 'none';
+    }
+  }
+}
+
+function unfilterTable(){
+  var rowElements = document.getElementsByTagName('tbody')[0].children; 
+  for (var idx = 1; idx < rowElements.length; idx++) {
+    if (rowElements[idx].style.display == 'none' || rowElements[idx].style.display == 'hidden') {
+      rowElements[idx].style.display = '';
+    } 
+  }
+}
+
 /*
 function goto_unauthorized() {
   location.href="/unauthorized"
